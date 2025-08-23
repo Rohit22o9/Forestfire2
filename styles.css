@@ -360,10 +360,46 @@ html {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    color: #ffffff;
+}
+
+.speed-control label {
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .speed-control input[type="range"] {
     width: 100px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.speed-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: #ff6b35;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+}
+
+.speed-control input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    background: #ff6b35;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+}
+
+#speed-value {
+    font-weight: 600;
+    color: #ff6b35;
+    min-width: 25px;
 }
 
 .time-display {

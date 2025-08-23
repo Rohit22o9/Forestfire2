@@ -498,6 +498,9 @@ function initializeSimulation() {
 
     // Toggle prediction button
     document.getElementById('toggle-prediction').addEventListener('click', togglePrediction);
+
+    // Initialize simulation monitoring chart
+    initializeSimulationMonitoringChart();
 }
 
 // Fire simulation functions
@@ -543,12 +546,18 @@ function startSimulation() {
     simulationInterval = setInterval(() => {
         simulationTime += 1;
         updateSimulationTime();
+        
+        // Update monitoring stats
+        updateMonitoringStats();
 
         // Use requestAnimationFrame for smoother performance
         requestAnimationFrame(() => {
             simulateFireSpread();
         });
     }, interval);
+    
+    // Initial update
+    updateMonitoringStats();
 }
 
 function pauseSimulation() {
@@ -562,6 +571,9 @@ function resetSimulation() {
     pauseSimulation();
     simulationTime = 0;
     updateSimulationTime();
+    
+    // Reset monitoring stats
+    updateMonitoringStats();
 
     // Clear fire spread layers
     fireSpreadLayers.forEach(layer => {
@@ -986,32 +998,184 @@ simulationMap.on('load', function() {
     }, 1000);
 });
 
+// Initialize simulation monitoring chart
+function initializeSimulationMonitoringChart() {
+    const ctx = document.getElementById('simulationMonitoringChart').getContext('2d');
+    
+    const simulationMonitoringChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['0m'],
+            datasets: [
+                {
+                    label: 'Area Burned (ha)',
+                    data: [0],
+                    borderColor: '#ff6b35',
+                    backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Fire Perimeter (km)',
+                    data: [0],
+                    borderColor: '#ffa726',
+                    backgroundColor: 'rgba(255, 167, 38, 0.1)',
+                    fill: false,
+                    tension: 0.4,
+                    yAxisID: 'y1'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#ffffff',
+                        font: {
+                            size: 11
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: '#ffffff',
+                        font: {
+                            size: 10
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    ticks: {
+                        color: '#ffffff',
+                        font: {
+                            size: 10
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Area (ha)',
+                        color: '#ff6b35',
+                        font: {
+                            size: 10
+                        }
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    ticks: {
+                        color: '#ffffff',
+                        font: {
+                            size: 10
+                        }
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                    title: {
+                        display: true,
+                        text: 'Perimeter (km)',
+                        color: '#ffa726',
+                        font: {
+                            size: 10
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Store chart reference
+    if (!window.chartInstances) {
+        window.chartInstances = {};
+    }
+    window.chartInstances.simulationMonitoring = simulationMonitoringChart;
+}
+
 // Update monitoring stats for the new graph
 function updateMonitoringStats() {
     if (isSimulationRunning) {
-        // Simulate dynamic data for the new graph
-        const burnedArea = Math.random() * 500; // Simulate area burned
-        const fireIntensity = Math.random() * 10; // Simulate intensity
-        const spreadRate = Math.random() * 5; // Simulate spread rate
+        // Calculate realistic stats based on simulation time and fire spread
+        const timeInHours = simulationTime / 60;
+        const baseArea = Math.pow(timeInHours, 1.5) * 25; // Exponential-like growth
+        const burnedArea = baseArea + (Math.random() * 20 - 10); // Add some variation
+        const firePerimeter = Math.sqrt(burnedArea * 4 * Math.PI); // Rough circular perimeter
+        const spreadRate = timeInHours > 0 ? burnedArea / timeInHours : 0;
+        const activeCount = Math.min(Math.floor(burnedArea / 50) + 1, 15); // More fires as area increases
 
-        document.getElementById('burned-area-stat').textContent = burnedArea.toFixed(0) + ' ha';
-        document.getElementById('fire-intensity-stat').textContent = fireIntensity.toFixed(1);
-        document.getElementById('spread-rate-stat').textContent = spreadRate.toFixed(2) + ' km/h';
+        // Update display stats
+        document.getElementById('totalBurnedArea').textContent = Math.max(0, burnedArea).toFixed(0) + ' ha';
+        document.getElementById('firePerimeter').textContent = Math.max(0, firePerimeter).toFixed(1) + ' km';
+        document.getElementById('spreadRate').textContent = Math.max(0, spreadRate).toFixed(1) + ' ha/hr';
+        document.getElementById('activeFireSources').textContent = activeCount;
 
-        // Update the charts if they exist
-        if (window.chartInstances && window.chartInstances.fireSpread) {
-            const fireSpreadChart = window.chartInstances.fireSpread;
-            // Update the fire spread chart with simulated data if it's not already updated by updateFireSpreadChart
-            // This part might need more sophisticated logic to avoid double updates or conflicts
-        }
+        // Update monitoring chart
+        updateSimulationMonitoringChart(burnedArea, firePerimeter);
     } else {
         // Reset stats when simulation is not running
-        document.getElementById('burned-area-stat').textContent = '0 ha';
-        document.getElementById('fire-intensity-stat').textContent = '0.0';
-        document.getElementById('spread-rate-stat').textContent = '0.00 km/h';
+        document.getElementById('totalBurnedArea').textContent = '0 ha';
+        document.getElementById('firePerimeter').textContent = '0 km';
+        document.getElementById('spreadRate').textContent = '0 ha/hr';
+        document.getElementById('activeFireSources').textContent = '0';
+        
+        // Reset chart
+        if (window.chartInstances && window.chartInstances.simulationMonitoring) {
+            const chart = window.chartInstances.simulationMonitoring;
+            chart.data.labels = ['0m'];
+            chart.data.datasets[0].data = [0];
+            chart.data.datasets[1].data = [0];
+            chart.update('none');
+        }
     }
 }
 
-// You might want to call updateMonitoringStats() periodically if the simulation is running
-// For example, within the startSimulation function or a new setInterval
-// setInterval(updateMonitoringStats, 5000); // Update every 5 seconds when simulation is active
+// Update simulation monitoring chart
+function updateSimulationMonitoringChart(burnedArea, firePerimeter) {
+    if (window.chartInstances && window.chartInstances.simulationMonitoring) {
+        const chart = window.chartInstances.simulationMonitoring;
+        
+        // Create time label
+        const timeLabel = simulationTime > 60 ? 
+            Math.floor(simulationTime / 60) + 'h' + (simulationTime % 60 > 0 ? (simulationTime % 60) + 'm' : '') :
+            simulationTime + 'm';
+
+        // Limit data points to prevent chart overflow
+        if (chart.data.labels.length > 20) {
+            chart.data.labels.shift();
+            chart.data.datasets[0].data.shift();
+            chart.data.datasets[1].data.shift();
+        }
+
+        chart.data.labels.push(timeLabel);
+        chart.data.datasets[0].data.push(Math.max(0, burnedArea));
+        chart.data.datasets[1].data.push(Math.max(0, firePerimeter));
+
+        chart.update('none');
+    }
+}
