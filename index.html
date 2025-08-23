@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroNix - Forest Fire Prediction & Simulation Dashboard</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Fixed Header -->
+    <header class="fixed-header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-fire-flame-curved"></i>
+                <span>NeuroNix</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#fire-risk" class="nav-link">Fire Risk Prediction</a>
+                <a href="#fire-simulation" class="nav-link">Fire Spread Simulation</a>
+                <a href="#alerts" class="nav-link">Alerts</a>
+                <a href="#data-sources" class="nav-link">Data Sources</a>
+                <a href="#analytics" class="nav-link">Analytics</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home" class="section hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">NeuroNix Forest Fire Prediction & Simulation Dashboard</h1>
+            <p class="hero-subtitle">AI-Powered Forest Fire Management for Uttarakhand, India</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">97%</div>
+                    <div class="stat-label">Prediction Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Real-time Monitoring</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">53,483</div>
+                    <div class="stat-label">km² Coverage</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fire Risk Prediction Section -->
+    <section id="fire-risk" class="section">
+        <div class="section-header">
+            <h2>Fire Risk Prediction</h2>
+            <p>Advanced Neural Network Model for Fire Risk Assessment</p>
+        </div>
+        <div class="section-content">
+            <div class="map-container">
+                <div id="risk-map" class="map"></div>
+                <div class="map-controls">
+                    <button id="toggle-prediction" class="control-btn">
+                        <i class="fas fa-clock"></i>
+                        Show Next Day Prediction
+                    </button>
+                </div>
+            </div>
+            <div class="risk-panel">
+                <div class="panel-header">
+                    <h3>Current Risk Analysis</h3>
+                    <div class="update-time">Last updated: <span id="last-update">2 minutes ago</span></div>
+                </div>
+                <div class="risk-zones">
+                    <div class="risk-item high-risk">
+                        <div class="risk-color"></div>
+                        <div class="risk-info">
+                            <span class="risk-level">Very High Risk</span>
+                            <span class="risk-area">Nainital District</span>
+                        </div>
+                        <div class="risk-percentage">85%</div>
+                    </div>
+                    <div class="risk-item moderate-risk">
+                        <div class="risk-color"></div>
+                        <div class="risk-info">
+                            <span class="risk-level">High Risk</span>
+                            <span class="risk-area">Almora District</span>
+                        </div>
+                        <div class="risk-percentage">68%</div>
+                    </div>
+                    <div class="risk-item low-risk">
+                        <div class="risk-color"></div>
+                        <div class="risk-info">
+                            <span class="risk-level">Moderate Risk</span>
+                            <span class="risk-area">Dehradun District</span>
+                        </div>
+                        <div class="risk-percentage">42%</div>
+                    </div>
+                </div>
+                <div class="model-info">
+                    <h4>AI Model Performance</h4>
+                    <div class="performance-metrics">
+                        <div class="metric">
+                            <span class="metric-label">Accuracy</span>
+                            <span class="metric-value">97.2%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Confidence</span>
+                            <span class="metric-value">94.8%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fire Spread Simulation Section -->
+    <section id="fire-simulation" class="section">
+        <div class="section-header">
+            <h2>Fire Spread Simulation</h2>
+            <p>Interactive Cellular Automata Fire Spread Model</p>
+        </div>
+        <div class="section-content">
+            <div class="simulation-container">
+                <div id="simulation-map" class="map"></div>
+                <div class="simulation-controls">
+                    <div class="control-group">
+                        <button id="play-simulation" class="control-btn primary">
+                            <i class="fas fa-play"></i>
+                            Play
+                        </button>
+                        <button id="pause-simulation" class="control-btn">
+                            <i class="fas fa-pause"></i>
+                            Pause
+                        </button>
+                        <button id="reset-simulation" class="control-btn">
+                            <i class="fas fa-refresh"></i>
+                            Reset
+                        </button>
+                    </div>
+                    <div class="speed-control">
+                        <label>Speed:</label>
+                        <input type="range" id="speed-slider" min="1" max="10" value="5">
+                        <span id="speed-value">5x</span>
+                    </div>
+                    <div class="time-display">
+                        <span>Simulation Time: </span>
+                        <span id="simulation-time">0 hours</span>
+                    </div>
+                </div>
+            </div>
+            <div class="parameters-panel">
+                <h3>Environmental Parameters</h3>
+                <div class="parameter-grid">
+                    <div class="parameter-item">
+                        <div class="parameter-icon">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <div class="parameter-info">
+                            <span class="parameter-label">Wind Speed</span>
+                            <span class="parameter-value" id="wind-speed">15 km/h</span>
+                        </div>
+                    </div>
+                    <div class="parameter-item">
+                        <div class="parameter-icon">
+                            <i class="fas fa-compass"></i>
+                        </div>
+                        <div class="parameter-info">
+                            <span class="parameter-label">Wind Direction</span>
+                            <span class="parameter-value" id="wind-direction">NE</span>
+                        </div>
+                    </div>
+                    <div class="parameter-item">
+                        <div class="parameter-icon">
+                            <i class="fas fa-thermometer-half"></i>
+                        </div>
+                        <div class="parameter-info">
+                            <span class="parameter-label">Temperature</span>
+                            <span class="parameter-value" id="temperature">32°C</span>
+                        </div>
+                    </div>
+                    <div class="parameter-item">
+                        <div class="parameter-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="parameter-info">
+                            <span class="parameter-label">Humidity</span>
+                            <span class="parameter-value" id="humidity">45%</span>
+                        </div>
+                    </div>
+                    <div class="parameter-item">
+                        <div class="parameter-icon">
+                            <i class="fas fa-mountain"></i>
+                        </div>
+                        <div class="parameter-info">
+                            <span class="parameter-label">Terrain Slope</span>
+                            <span class="parameter-value" id="terrain-slope">12°</span>
+                        </div>
+                    </div>
+                    <div class="parameter-item">
+                        <div class="parameter-icon">
+                            <i class="fas fa-tree"></i>
+                        </div>
+                        <div class="parameter-info">
+                            <span class="parameter-label">Vegetation Density</span>
+                            <span class="parameter-value" id="vegetation-density">Dense</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alerts Section -->
+    <section id="alerts" class="section">
+        <div class="section-header">
+            <h2>Alert System</h2>
+            <p>Real-time Fire Risk Warnings and Notifications</p>
+        </div>
+        <div class="section-content">
+            <div class="alerts-container">
+                <div class="alerts-list">
+                    <div class="alert-item critical">
+                        <div class="alert-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">Critical Fire Risk Warning</div>
+                            <div class="alert-description">High fire danger in Nainital District due to dry conditions and strong winds</div>
+                            <div class="alert-time">15 minutes ago</div>
+                        </div>
+                        <div class="alert-status">ACTIVE</div>
+                    </div>
+                    <div class="alert-item warning">
+                        <div class="alert-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">Active Fire Detected</div>
+                            <div class="alert-description">Small fire spotted near Jim Corbett National Park - monitoring for spread</div>
+                            <div class="alert-time">1 hour ago</div>
+                        </div>
+                        <div class="alert-status">MONITORING</div>
+                    </div>
+                    <div class="alert-item info">
+                        <div class="alert-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">Evacuation Recommendation</div>
+                            <div class="alert-description">Precautionary evacuation advised for villages near Almora forest areas</div>
+                            <div class="alert-time">3 hours ago</div>
+                        </div>
+                        <div class="alert-status">ADVISORY</div>
+                    </div>
+                </div>
+                <div class="alert-actions">
+                    <button class="action-btn primary">
+                        <i class="fas fa-download"></i>
+                        Export GeoTIFF
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-file-export"></i>
+                        Export Shapefiles
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-bell"></i>
+                        Alert Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Sources Section -->
+    <section id="data-sources" class="section">
+        <div class="section-header">
+            <h2>Data Sources</h2>
+            <p>Real-time Data Ingestion from Multiple Sources</p>
+        </div>
+        <div class="section-content">
+            <div class="data-sources-grid">
+                <div class="source-card">
+                    <div class="source-icon">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <div class="source-info">
+                        <h3>Satellite Data</h3>
+                        <p>MODIS, Sentinel-2</p>
+                        <div class="source-status active">
+                            <span class="status-dot"></span>
+                            Active
+                        </div>
+                    </div>
+                </div>
+                <div class="source-card">
+                    <div class="source-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <div class="source-info">
+                        <h3>Weather Data</h3>
+                        <p>ERA5 (ECMWF)</p>
+                        <div class="source-status active">
+                            <span class="status-dot"></span>
+                            Active
+                        </div>
+                    </div>
+                </div>
+                <div class="source-card">
+                    <div class="source-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="source-info">
+                        <h3>Vegetation</h3>
+                        <p>NDVI from Sentinel-2</p>
+                        <div class="source-status active">
+                            <span class="status-dot"></span>
+                            Active
+                        </div>
+                    </div>
+                </div>
+                <div class="source-card">
+                    <div class="source-icon">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <div class="source-info">
+                        <h3>Terrain</h3>
+                        <p>SRTM DEM (NASA)</p>
+                        <div class="source-status active">
+                            <span class="status-dot"></span>
+                            Active
+                        </div>
+                    </div>
+                </div>
+                <div class="source-card">
+                    <div class="source-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="source-info">
+                        <h3>Human Activity</h3>
+                        <p>GHSL, OSM</p>
+                        <div class="source-status warning">
+                            <span class="status-dot"></span>
+                            Limited
+                        </div>
+                    </div>
+                </div>
+                <div class="source-card">
+                    <div class="source-icon">
+                        <i class="fas fa-thermometer"></i>
+                    </div>
+                    <div class="source-info">
+                        <h3>Sensors</h3>
+                        <p>Ground Weather Stations</p>
+                        <div class="source-status active">
+                            <span class="status-dot"></span>
+                            12 Active
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section id="analytics" class="section">
+        <div class="section-header">
+            <h2>Analytics Dashboard</h2>
+            <p>Performance Metrics and Historical Data Analysis</p>
+        </div>
+        <div class="section-content">
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Model Performance</h3>
+                    <div class="performance-chart">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+                <div class="analytics-card">
+                    <h3>Coverage Statistics</h3>
+                    <div class="stats-list">
+                        <div class="stat-row">
+                            <span>Areas Monitored</span>
+                            <span class="stat-number">13 Districts</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Alerts Generated (24h)</span>
+                            <span class="stat-number">47</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Successful Interventions</span>
+                            <span class="stat-number">23</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Response Time (Avg)</span>
+                            <span class="stat-number">12 min</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="analytics-card wide">
+                    <h3>Risk Levels Over Time</h3>
+                    <div class="risk-timeline">
+                        <canvas id="riskChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
