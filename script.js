@@ -343,10 +343,138 @@ function togglePrediction() {
     if (isNextDay) {
         btn.innerHTML = '<i class="fas fa-clock"></i> Show Next Day Prediction';
         // Show current day data
+        showCurrentDayPrediction();
     } else {
         btn.innerHTML = '<i class="fas fa-calendar"></i> Show Current Day';
         // Show next day prediction
+        showNextDayPrediction();
     }
+}
+
+// Show current day prediction data
+function showCurrentDayPrediction() {
+    // Update risk zones to current day values
+    updateRiskZones([
+        { name: 'Nainital District', risk: 'very-high', percentage: 85 },
+        { name: 'Almora District', risk: 'high', percentage: 68 },
+        { name: 'Dehradun District', risk: 'moderate', percentage: 42 }
+    ]);
+    
+    // Update map polygons with current colors
+    updateMapRiskColors('current');
+    
+    // Update last update time
+    document.getElementById('last-update').textContent = '2 minutes ago';
+}
+
+// Show next day prediction data
+function showNextDayPrediction() {
+    // Update risk zones to next day predicted values (generally higher)
+    updateRiskZones([
+        { name: 'Nainital District', risk: 'very-high', percentage: 92 },
+        { name: 'Almora District', risk: 'very-high', percentage: 78 },
+        { name: 'Dehradun District', risk: 'high', percentage: 65 }
+    ]);
+    
+    // Update map polygons with predicted colors
+    updateMapRiskColors('predicted');
+    
+    // Update last update time
+    document.getElementById('last-update').textContent = 'Predicted for tomorrow';
+}
+
+// Update risk zones display
+function updateRiskZones(zones) {
+    const riskContainer = document.querySelector('.risk-zones');
+    riskContainer.innerHTML = '';
+    
+    zones.forEach(zone => {
+        const riskClass = zone.risk === 'very-high' ? 'high-risk' : 
+                         zone.risk === 'high' ? 'moderate-risk' : 'low-risk';
+        
+        const riskItem = document.createElement('div');
+        riskItem.className = `risk-item ${riskClass}`;
+        riskItem.innerHTML = `
+            <div class="risk-color"></div>
+            <div class="risk-info">
+                <span class="risk-level">${zone.risk.replace('-', ' ').toUpperCase()} Risk</span>
+                <span class="risk-area">${zone.name}</span>
+            </div>
+            <div class="risk-percentage">${zone.percentage}%</div>
+        `;
+        riskContainer.appendChild(riskItem);
+    });
+}
+
+// Update map risk colors
+function updateMapRiskColors(type) {
+    // Clear existing layers
+    riskMap.eachLayer(layer => {
+        if (layer instanceof L.Polygon) {
+            riskMap.removeLayer(layer);
+        }
+    });
+    
+    // Define zones based on prediction type
+    const zones = type === 'current' ? [
+        {
+            name: 'Nainital District',
+            coords: [[29.2, 79.3], [29.6, 79.3], [29.6, 79.8], [29.2, 79.8]],
+            risk: 'very-high',
+            color: '#ff4444'
+        },
+        {
+            name: 'Almora District',
+            coords: [[29.5, 79.5], [29.9, 79.5], [29.9, 80.0], [29.5, 80.0]],
+            risk: 'high',
+            color: '#ffa726'
+        },
+        {
+            name: 'Dehradun District',
+            coords: [[30.1, 77.8], [30.5, 77.8], [30.5, 78.3], [30.1, 78.3]],
+            risk: 'moderate',
+            color: '#66bb6a'
+        }
+    ] : [
+        {
+            name: 'Nainital District',
+            coords: [[29.2, 79.3], [29.6, 79.3], [29.6, 79.8], [29.2, 79.8]],
+            risk: 'very-high',
+            color: '#cc0000'  // Darker red for higher predicted risk
+        },
+        {
+            name: 'Almora District',
+            coords: [[29.5, 79.5], [29.9, 79.5], [29.9, 80.0], [29.5, 80.0]],
+            risk: 'very-high',
+            color: '#ff4444'  // Red for elevated risk
+        },
+        {
+            name: 'Dehradun District',
+            coords: [[30.1, 77.8], [30.5, 77.8], [30.5, 78.3], [30.1, 78.3]],
+            risk: 'high',
+            color: '#ffa726'  // Orange for increased risk
+        }
+    ];
+    
+    // Add updated zones to map
+    zones.forEach(zone => {
+        const polygon = L.polygon(zone.coords, {
+            color: zone.color,
+            fillColor: zone.color,
+            fillOpacity: type === 'predicted' ? 0.6 : 0.4,
+            weight: type === 'predicted' ? 3 : 2
+        }).addTo(riskMap);
+        
+        const riskLevel = zone.risk.replace('-', ' ').toUpperCase();
+        const prefix = type === 'predicted' ? 'Predicted: ' : '';
+        
+        polygon.bindPopup(`
+            <div>
+                <h4>${zone.name}</h4>
+                <p>${prefix}Risk Level: ${riskLevel}</p>
+            </div>
+        `);
+    });
 }
 
 // Start real-time data updates
