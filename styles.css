@@ -639,8 +639,19 @@ html {
 }
 
 .analytics-card h3 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     font-size: 1.3rem;
+}
+
+.chart-description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.chart-container {
+    height: 250px;
+    position: relative;
 }
 
 .stats-list {
@@ -664,6 +675,73 @@ html {
 .stat-row .stat-number {
     font-weight: 700;
     color: #ff6b35;
+}
+
+.stat-row .stat-number.critical {
+    color: #ff4444;
+}
+
+/* Gauge Container Styles */
+.gauge-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.gauge-item {
+    text-align: center;
+}
+
+.gauge-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gauge-wrapper canvas {
+    width: 80px !important;
+    height: 80px !important;
+}
+
+.gauge-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 0.5rem;
+}
+
+.gauge-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ff6b35;
+    margin-top: 0.2rem;
+}
+
+/* Alert Stats Summary */
+.alert-stats-summary {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.alert-stats-summary .stat-row {
+    padding: 0.3rem 0;
+    font-size: 0.9rem;
+}
+
+/* Chart Loading Animation */
+.chart-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 250px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.chart-loading::after {
+    content: 'Loading chart data...';
+    animation: pulse 2s infinite;
 }
 
 /* Responsive Design */

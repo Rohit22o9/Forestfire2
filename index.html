@@ -371,12 +371,77 @@
         </div>
         <div class="section-content">
             <div class="analytics-grid">
-                <div class="analytics-card">
-                    <h3>Model Performance</h3>
-                    <div class="performance-chart">
-                        <canvas id="performanceChart"></canvas>
+                <!-- Fire Risk Level Over Time Chart -->
+                <div class="analytics-card wide">
+                    <h3>Fire Risk Level Over Time</h3>
+                    <p class="chart-description">Multi-region fire risk monitoring throughout the day</p>
+                    <div class="chart-container">
+                        <canvas id="riskTimelineChart"></canvas>
                     </div>
                 </div>
+
+                <!-- Fire Spread Simulation Timeline Chart -->
+                <div class="analytics-card wide">
+                    <h3>Fire Spread Simulation Timeline</h3>
+                    <p class="chart-description">Area burned expansion over time during active simulation</p>
+                    <div class="chart-container">
+                        <canvas id="fireSpreadChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Model Accuracy & Performance Gauges -->
+                <div class="analytics-card">
+                    <h3>Model Accuracy & Performance</h3>
+                    <p class="chart-description">Real-time system performance indicators</p>
+                    <div class="gauge-container">
+                        <div class="gauge-item">
+                            <div class="gauge-wrapper">
+                                <canvas id="accuracyGauge"></canvas>
+                                <div class="gauge-label">Prediction Accuracy</div>
+                                <div class="gauge-value" id="accuracyValue">97%</div>
+                            </div>
+                        </div>
+                        <div class="gauge-item">
+                            <div class="gauge-wrapper">
+                                <canvas id="uptimeGauge"></canvas>
+                                <div class="gauge-label">System Uptime</div>
+                                <div class="gauge-value" id="uptimeValue">99.8%</div>
+                            </div>
+                        </div>
+                        <div class="gauge-item">
+                            <div class="gauge-wrapper">
+                                <canvas id="speedGauge"></canvas>
+                                <div class="gauge-label">Processing Speed</div>
+                                <div class="gauge-value" id="speedValue">85%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alert Statistics Pie Chart -->
+                <div class="analytics-card">
+                    <h3>Alert Statistics</h3>
+                    <p class="chart-description">Distribution of alert types and frequencies</p>
+                    <div class="chart-container">
+                        <canvas id="alertStatsChart"></canvas>
+                    </div>
+                    <div class="alert-stats-summary">
+                        <div class="stat-row">
+                            <span>Total Alerts (24h)</span>
+                            <span class="stat-number" id="totalAlerts">142</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Active Fires</span>
+                            <span class="stat-number critical" id="activeFires">8</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Response Time (Avg)</span>
+                            <span class="stat-number" id="responseTime">12 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coverage Statistics -->
                 <div class="analytics-card">
                     <h3>Coverage Statistics</h3>
                     <div class="stats-list">
@@ -385,23 +450,25 @@
                             <span class="stat-number">13 Districts</span>
                         </div>
                         <div class="stat-row">
-                            <span>Alerts Generated (24h)</span>
-                            <span class="stat-number">47</span>
+                            <span>Sensors Active</span>
+                            <span class="stat-number">247</span>
                         </div>
                         <div class="stat-row">
                             <span>Successful Interventions</span>
                             <span class="stat-number">23</span>
                         </div>
                         <div class="stat-row">
-                            <span>Response Time (Avg)</span>
-                            <span class="stat-number">12 min</span>
+                            <span>Data Points/Hour</span>
+                            <span class="stat-number">15.6K</span>
                         </div>
                     </div>
                 </div>
-                <div class="analytics-card wide">
-                    <h3>Risk Levels Over Time</h3>
-                    <div class="risk-timeline">
-                        <canvas id="riskChart"></canvas>
+
+                <!-- Original Risk Chart (keeping for reference) -->
+                <div class="analytics-card">
+                    <h3>Model Performance Overview</h3>
+                    <div class="performance-chart">
+                        <canvas id="performanceChart"></canvas>
                     </div>
                 </div>
             </div>

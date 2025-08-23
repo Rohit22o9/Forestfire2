@@ -154,7 +154,7 @@ function addForestAreas() {
 
 // Initialize charts
 function initializeCharts() {
-    // Performance Chart
+    // Performance Chart (Original)
     const performanceCtx = document.getElementById('performanceChart').getContext('2d');
     new Chart(performanceCtx, {
         type: 'doughnut',
@@ -179,17 +179,105 @@ function initializeCharts() {
         }
     });
     
-    // Risk Timeline Chart
-    const riskCtx = document.getElementById('riskChart').getContext('2d');
-    new Chart(riskCtx, {
+    // Fire Risk Level Over Time Chart
+    const riskTimelineCtx = document.getElementById('riskTimelineChart').getContext('2d');
+    const riskTimelineChart = new Chart(riskTimelineCtx, {
         type: 'line',
         data: {
-            labels: ['6AM', '12PM', '6PM', '12AM', '6AM', '12PM'],
+            labels: ['6AM', '9AM', '12PM', '3PM', '6PM', '9PM', '12AM', '3AM'],
+            datasets: [
+                {
+                    label: 'Dehradun',
+                    data: [25, 35, 55, 75, 85, 65, 45, 30],
+                    borderColor: '#66bb6a',
+                    backgroundColor: 'rgba(102, 187, 106, 0.1)',
+                    fill: false,
+                    tension: 0.4
+                },
+                {
+                    label: 'Nainital',
+                    data: [45, 55, 70, 85, 90, 80, 60, 50],
+                    borderColor: '#ff4444',
+                    backgroundColor: 'rgba(255, 68, 68, 0.1)',
+                    fill: false,
+                    tension: 0.4
+                },
+                {
+                    label: 'Haridwar',
+                    data: [30, 40, 60, 70, 75, 55, 40, 35],
+                    borderColor: '#ffa726',
+                    backgroundColor: 'rgba(255, 167, 38, 0.1)',
+                    fill: false,
+                    tension: 0.4
+                },
+                {
+                    label: 'Rishikesh',
+                    data: [20, 30, 45, 65, 70, 50, 35, 25],
+                    borderColor: '#42a5f5',
+                    backgroundColor: 'rgba(66, 165, 245, 0.1)',
+                    fill: false,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#ffffff'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: '#ffffff'
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                y: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        color: '#ffffff',
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                }
+            }
+        }
+    });
+
+    // Fire Spread Simulation Timeline Chart
+    const fireSpreadCtx = document.getElementById('fireSpreadChart').getContext('2d');
+    let fireSpreadChart = new Chart(fireSpreadCtx, {
+        type: 'line',
+        data: {
+            labels: ['0h', '1h', '2h', '3h', '4h', '5h', '6h'],
             datasets: [{
-                label: 'Risk Level',
-                data: [30, 45, 70, 85, 65, 40],
+                label: 'Area Burned (hectares)',
+                data: [0, 12, 35, 78, 145, 225, 320],
                 borderColor: '#ff6b35',
-                backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                backgroundColor: createGradient(fireSpreadCtx, '#ff6b35', '#ff4444'),
                 fill: true,
                 tension: 0.4
             }]
@@ -201,6 +289,18 @@ function initializeCharts() {
                 legend: {
                     labels: {
                         color: '#ffffff'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1,
+                    callbacks: {
+                        label: function(context) {
+                            return 'Burned: ' + context.parsed.y + ' hectares';
+                        }
                     }
                 }
             },
@@ -215,11 +315,155 @@ function initializeCharts() {
                 },
                 y: {
                     ticks: {
-                        color: '#ffffff'
+                        color: '#ffffff',
+                        callback: function(value) {
+                            return value + ' ha';
+                        }
                     },
                     grid: {
                         color: 'rgba(255, 255, 255, 0.1)'
                     }
+                }
+            }
+        }
+    });
+
+    // Gauge Charts
+    initializeGaugeCharts();
+
+    // Alert Statistics Pie Chart
+    const alertStatsCtx = document.getElementById('alertStatsChart').getContext('2d');
+    new Chart(alertStatsCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Fire Risk Warnings', 'Active Fire Detected', 'Evacuation Alerts', 'All Clear/Safe Zones'],
+            datasets: [{
+                data: [35, 25, 20, 20],
+                backgroundColor: ['#ffa726', '#ff4444', '#ff6b35', '#66bb6a'],
+                borderWidth: 2,
+                borderColor: 'rgba(255, 255, 255, 0.1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#ffffff',
+                        padding: 15,
+                        usePointStyle: true
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1,
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            return context.label + ': ' + percentage + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Store chart references for updates
+    window.chartInstances = {
+        riskTimeline: riskTimelineChart,
+        fireSpread: fireSpreadChart
+    };
+}
+
+// Create gradient for fire spread chart
+function createGradient(ctx, color1, color2) {
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, color1 + '80');
+    gradient.addColorStop(1, color2 + '20');
+    return gradient;
+}
+
+// Initialize Gauge Charts
+function initializeGaugeCharts() {
+    // Accuracy Gauge
+    const accuracyCtx = document.getElementById('accuracyGauge').getContext('2d');
+    new Chart(accuracyCtx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [97, 3],
+                backgroundColor: ['#66bb6a', 'rgba(255, 255, 255, 0.1)'],
+                borderWidth: 0,
+                cutout: '75%'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            }
+        }
+    });
+
+    // Uptime Gauge
+    const uptimeCtx = document.getElementById('uptimeGauge').getContext('2d');
+    new Chart(uptimeCtx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [99.8, 0.2],
+                backgroundColor: ['#66bb6a', 'rgba(255, 255, 255, 0.1)'],
+                borderWidth: 0,
+                cutout: '75%'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
+                }
+            }
+        }
+    });
+
+    // Speed Gauge
+    const speedCtx = document.getElementById('speedGauge').getContext('2d');
+    new Chart(speedCtx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [85, 15],
+                backgroundColor: ['#ffa726', 'rgba(255, 255, 255, 0.1)'],
+                borderWidth: 0,
+                cutout: '75%'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: false
                 }
             }
         }
@@ -587,6 +831,12 @@ function startDataUpdates() {
     
     // Update time stamps
     setInterval(updateTimeStamps, 60000); // Every minute
+    
+    // Update charts
+    setInterval(updateChartData, 45000); // Every 45 seconds
+    
+    // Update fire spread chart during simulation
+    setInterval(updateFireSpreadChart, 10000); // Every 10 seconds during simulation
 }
 
 function updateEnvironmentalData() {
@@ -622,6 +872,79 @@ function updateTimeStamps() {
     setTimeout(() => {
         document.getElementById('last-update').textContent = '1 minute ago';
     }, 5000);
+}
+
+// Update chart data with realistic variations
+function updateChartData() {
+    if (window.chartInstances && window.chartInstances.riskTimeline) {
+        const chart = window.chartInstances.riskTimeline;
+        
+        // Update each region's data with small realistic variations
+        chart.data.datasets.forEach((dataset, index) => {
+            dataset.data = dataset.data.map(value => {
+                const variation = (Math.random() - 0.5) * 10; // ±5 point variation
+                return Math.max(0, Math.min(100, value + variation));
+            });
+        });
+        
+        chart.update('none'); // Update without animation for smoother real-time feel
+    }
+    
+    // Update gauge values
+    updateGaugeValues();
+    
+    // Update alert statistics
+    updateAlertStatistics();
+}
+
+// Update fire spread chart during simulation
+function updateFireSpreadChart() {
+    if (isSimulationRunning && window.chartInstances && window.chartInstances.fireSpread) {
+        const chart = window.chartInstances.fireSpread;
+        const lastValue = chart.data.datasets[0].data[chart.data.datasets[0].data.length - 1];
+        
+        // Add new data point based on simulation time
+        const timeLabel = simulationTime + 'h';
+        const newArea = lastValue + Math.random() * 50 + 20; // Realistic fire spread
+        
+        // Limit data points to prevent chart overflow
+        if (chart.data.labels.length > 10) {
+            chart.data.labels.shift();
+            chart.data.datasets[0].data.shift();
+        }
+        
+        chart.data.labels.push(timeLabel);
+        chart.data.datasets[0].data.push(Math.round(newArea));
+        
+        chart.update('none');
+    }
+}
+
+// Update gauge values
+function updateGaugeValues() {
+    // Accuracy gauge (minor fluctuations around 97%)
+    const newAccuracy = Math.max(95, Math.min(99, 97 + (Math.random() - 0.5) * 2));
+    document.getElementById('accuracyValue').textContent = newAccuracy.toFixed(1) + '%';
+    
+    // Uptime gauge (very stable around 99.8%)
+    const newUptime = Math.max(99.5, Math.min(100, 99.8 + (Math.random() - 0.5) * 0.3));
+    document.getElementById('uptimeValue').textContent = newUptime.toFixed(1) + '%';
+    
+    // Speed gauge (more variable around 85%)
+    const newSpeed = Math.max(70, Math.min(95, 85 + (Math.random() - 0.5) * 10));
+    document.getElementById('speedValue').textContent = Math.round(newSpeed) + '%';
+}
+
+// Update alert statistics
+function updateAlertStatistics() {
+    // Generate realistic alert counts
+    const totalAlerts = Math.floor(Math.random() * 20) + 130; // 130-150 range
+    const activeFires = Math.floor(Math.random() * 5) + 5; // 5-10 range
+    const responseTime = Math.floor(Math.random() * 8) + 8; // 8-16 minutes
+    
+    document.getElementById('totalAlerts').textContent = totalAlerts;
+    document.getElementById('activeFires').textContent = activeFires;
+    document.getElementById('responseTime').textContent = responseTime + ' min';
 }
 
 // Export functionality
