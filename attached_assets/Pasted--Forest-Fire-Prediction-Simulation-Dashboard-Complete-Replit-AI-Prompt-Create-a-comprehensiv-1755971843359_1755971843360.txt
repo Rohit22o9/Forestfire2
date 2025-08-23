@@ -1,0 +1,161 @@
+# Forest Fire Prediction & Simulation Dashboard - Complete Replit AI Prompt
+
+Create a comprehensive single-page scrollable web dashboard for a forest fire prediction and simulation system called "NeuroNix" with the following specifications:
+
+## Project Overview
+Build an interactive single-page dashboard for forest fire disaster management that combines AI-powered fire risk prediction with real-time fire spread simulation. The system should demonstrate early intervention capabilities through geospatial analysis and automated alerts, specifically focused on Uttarakhand state, India.
+
+## Dashboard Layout Structure
+- **Single-page scrollable layout** with smooth scroll navigation
+- **Fixed header** with navigation menu that scrolls to different sections
+- **Full-screen sections** that stack vertically
+- **Sticky navigation** that highlights current section while scrolling
+
+## Core Features Required
+
+### 1. Header Section
+- **Fixed Header**: "NeuroNix - Forest Fire Prediction & Simulation Dashboard"
+- **Smooth Scroll Navigation Menu**: Home, Fire Risk Prediction, Fire Spread Simulation, Alerts, Data Sources, Analytics
+- **Navigation should scroll to respective sections** when clicked
+
+### 2. Fire Risk Prediction Section
+- **Map Visualization**: Interactive map showing fire risk zones with color coding:
+  - Green: Low Risk
+  - Yellow: Moderate Risk  
+  - Orange: High Risk
+  - Red: Very High Risk
+- **Risk Prediction Panel**: Display current fire risk levels for selected areas
+- **Model Information**: Show AI-powered prediction system with high accuracy
+- **Algorithm Details**: Display "Advanced Neural Network Model" instead of technical terms
+- **Next-day Prediction**: Toggle to show predicted fire risk for the next day
+
+### 3. Fire Spread Simulation Section
+- **Simulation Controls**: 
+  - Play/Pause/Reset buttons
+  - Speed control slider
+  - Time display (Hour-wise: 1 hour, 2 hours, 3 hours, 6 hours)
+- **Interactive Fire Spread Model**: 
+  - Click anywhere on the map to start a fire simulation
+  - Animated visualization showing how fire would spread from that point
+  - Uses Cellular Automata (CA) - map divided into small cells that change from Unburned → Burning → Burned
+  - Fire spreads from burning cells to neighboring cells based on environmental conditions
+- **Real-time Parameters Display**: 
+  - Wind speed and direction (affects fire spread speed and direction)
+  - Temperature and humidity (affects fire intensity)
+  - Terrain slope (fire spreads faster uphill)
+  - Vegetation density (denser forests burn faster)
+- **Visual Elements**:
+  - Red/orange areas = Currently burning zones
+  - Dark red/black areas = Already burned areas
+  - Moving fire front edge showing active spread direction
+
+### 4. Data Sources Panel
+Create input indicators for:
+- **Satellite Data**: MODIS, Sentinel-2 (with satellite icons)
+- **Weather Data**: ERA5 (ECMWF)
+- **Vegetation**: NDVI from Sentinel-2
+- **Terrain**: SRTM DEM (NASA)
+- **Human Activity**: GHSL, OSM
+- Show real-time data ingestion status with green/red indicators
+
+### 5. Alert System
+- **Alert Dashboard**: List of current active alerts
+- **Alert Types**: 
+  - Fire Risk Warnings
+  - Active Fire Detected
+  - Evacuation Recommendations
+- **GIS Integration**: Show alerts on map with location markers
+- **Export Options**: "Export GeoTIFF / Shapefiles for Govt use"
+
+### 6. System Performance Display
+- **Model Performance**: Show accuracy metrics and prediction confidence
+- **Processing Status**: Real-time system status indicators
+- **Coverage Area**: Display monitored regions and active sensors
+
+### 7. Analytics Dashboard
+- **Performance Metrics**: Model accuracy (97%), Prediction reliability
+- **Coverage Statistics**: Areas monitored, Alerts generated, Successful interventions
+- **Historical Data**: Past fire incidents and prediction accuracy
+- **Real-time Graphs**: Risk levels over time, Environmental conditions
+
+## Technical Requirements
+
+### Frontend
+- Use HTML5, CSS3, JavaScript
+- Responsive design that works on desktop and mobile
+- Interactive maps (use Leaflet.js or similar)
+- Charts and graphs (use Chart.js or D3.js)
+- Real-time data simulation (use setInterval for demo purposes)
+
+### Styling
+- **Color Scheme**: Dark blue background (#1a1a2e), bright blue accents (#16213e), orange/red for fire elements
+- **Modern UI**: Glassmorphism effects, smooth animations, gradient backgrounds
+- **Cards/Panels**: Rounded corners, subtle shadows, semi-transparent backgrounds
+- **Typography**: Clean, modern fonts with good contrast
+
+### Interactive Elements
+- Clickable map regions that show detailed information
+- Hover effects on all interactive elements
+- Modal windows for detailed views
+- Animated transitions between states
+- Loading animations for data processing
+
+### Demo Data
+Since this is for demonstration:
+- Create sample fire risk data for different regions within Uttarakhand
+- Generate mock real-time weather data specific to Uttarakhand climate
+- Simulate fire spread patterns with realistic animations for forest areas in Uttarakhand
+- Use actual coordinates for major cities and forest areas in Uttarakhand
+- Create sample alert notifications for various districts of Uttarakhand
+
+## Specific Implementation Details
+
+### Map Component
+```javascript
+// Include interactive map showing Uttarakhand, India with:
+- Base layer with terrain/satellite imagery of Uttarakhand
+- Fire risk zones with color-coded overlays across Uttarakhand districts
+- Real-time fire locations in forest areas (simulated)
+- Weather station markers across major cities
+- Clickable regions for detailed district/area information
+- Forest boundaries and national parks (Jim Corbett, Valley of Flowers, etc.)
+```
+
+### Simulation Engine
+```javascript
+// Create cellular automata simulation showing:
+- Fire spread patterns based on wind direction
+- Terrain effects on fire behavior
+- Real-time progression with time controls
+- Visual effects like particle systems for flames
+```
+
+### Alert System
+```javascript
+// Implement notification system with:
+- Real-time alert generation
+- Different alert severity levels
+- Sound notifications (optional)
+- Export functionality for emergency services
+```
+
+## Implementation
+Structure the code files as you see best fit for optimal functionality and maintainability.
+
+## Additional Features
+- **Responsive Design**: Works on tablets and phones
+- **Data Export**: CSV/JSON download for predictions
+- **Print-friendly Views**: For emergency response teams
+- **Accessibility**: Screen reader compatible
+- **Performance**: Fast loading with optimized assets
+
+## Sample Content
+Include realistic sample data showing:
+- Forest areas in Uttarakhand's high-risk zones (hill stations, dense forest areas)
+- Weather conditions typical to Uttarakhand affecting fire spread
+- Historical fire incidents and patterns specific to Uttarakhand region
+- Success stories of early intervention in similar mountainous terrain
+
+Make this dashboard look professional, modern, and suitable for demonstration as a real-world forest fire management solution. Focus on visual appeal, smooth interactions, and clear demonstration of the AI/ML capabilities.
+
+The dashboard should clearly show how satellite data, weather information, and AI models work together to predict fire risks and simulate fire spread patterns for effective disaster management.
