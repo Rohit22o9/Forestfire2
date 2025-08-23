@@ -1,4 +1,3 @@
-
 // Global variables
 let riskMap;
 let simulationMap;
@@ -13,40 +12,44 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeMaps();
     initializeCharts();
     initializeSimulation();
+
+    // Initialize monitoring stats
+    updateMonitoringStats();
+
     startDataUpdates();
 });
 
 // Navigation functionality
 function initializeNavigation() {
     const navLinks = document.querySelectorAll('.nav-link');
-    
+
     // Smooth scroll navigation
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = link.getAttribute('href').substring(1);
             const targetSection = document.getElementById(targetId);
-            
+
             if (targetSection) {
                 targetSection.scrollIntoView({ behavior: 'smooth' });
-                
+
                 // Update active nav link
                 navLinks.forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
             }
         });
     });
-    
+
     // Update active nav on scroll
     window.addEventListener('scroll', () => {
         const sections = document.querySelectorAll('.section');
         const scrollPos = window.scrollY + 100;
-        
+
         sections.forEach(section => {
             const top = section.offsetTop;
             const bottom = top + section.offsetHeight;
             const id = section.getAttribute('id');
-            
+
             if (scrollPos >= top && scrollPos <= bottom) {
                 navLinks.forEach(link => {
                     link.classList.remove('active');
@@ -63,26 +66,26 @@ function initializeNavigation() {
 function initializeMaps() {
     // Fire Risk Map
     riskMap = L.map('risk-map').setView([30.0668, 79.0193], 8);
-    
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(riskMap);
-    
+
     // Add risk zones for Uttarakhand districts
     addRiskZones();
-    
+
     // Simulation Map
     simulationMap = L.map('simulation-map').setView([30.0668, 79.0193], 8);
-    
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(simulationMap);
-    
+
     // Add click listener for fire simulation
     simulationMap.on('click', function(e) {
         startFireSimulation(e.latlng);
     });
-    
+
     // Add forest areas
     addForestAreas();
 }
@@ -109,14 +112,14 @@ function addRiskZones() {
             color: '#66bb6a'
         }
     ];
-    
+
     riskZones.forEach(zone => {
         const polygon = L.polygon(zone.coords, {
             color: zone.color,
             fillColor: zone.color,
             fillOpacity: 0.4
         }).addTo(riskMap);
-        
+
         polygon.bindPopup(`
             <div>
                 <h4>${zone.name}</h4>
@@ -140,14 +143,14 @@ function addForestAreas() {
             color: '#2d5a2d'
         }
     ];
-    
+
     forestAreas.forEach(forest => {
         const polygon = L.polygon(forest.coords, {
             color: forest.color,
             fillColor: forest.color,
             fillOpacity: 0.6
         }).addTo(simulationMap);
-        
+
         polygon.bindPopup(`<h4>${forest.name}</h4>`);
     });
 }
@@ -178,7 +181,7 @@ function initializeCharts() {
             }
         }
     });
-    
+
     // Fire Risk Level Over Time Chart
     const riskTimelineCtx = document.getElementById('riskTimelineChart').getContext('2d');
     const riskTimelineChart = new Chart(riskTimelineCtx, {
@@ -477,22 +480,22 @@ function initializeSimulation() {
     const resetBtn = document.getElementById('reset-simulation');
     const speedSlider = document.getElementById('speed-slider');
     const speedValue = document.getElementById('speed-value');
-    
+
     playBtn.addEventListener('click', () => {
         if (!isSimulationRunning) {
             startSimulation();
         }
     });
-    
+
     pauseBtn.addEventListener('click', pauseSimulation);
     resetBtn.addEventListener('click', resetSimulation);
-    
+
     speedSlider.addEventListener('input', (e) => {
         const speed = e.target.value;
         speedValue.textContent = `${speed}x`;
         updateSimulationSpeed(speed);
     });
-    
+
     // Toggle prediction button
     document.getElementById('toggle-prediction').addEventListener('click', togglePrediction);
 }
@@ -514,9 +517,9 @@ function startFireSimulation(latlng) {
             iconAnchor: [20, 20]
         })
     }).addTo(simulationMap);
-    
+
     fireSpreadLayers.push(fireMarker);
-    
+
     // Add initial burn circle
     const initialBurn = L.circle([latlng.lat, latlng.lng], {
         color: '#ff6b35',
@@ -525,22 +528,22 @@ function startFireSimulation(latlng) {
         radius: 200,
         className: 'fire-burn-area'
     }).addTo(simulationMap);
-    
+
     fireSpreadLayers.push(initialBurn);
 }
 
 function startSimulation() {
     isSimulationRunning = true;
     const speed = parseInt(document.getElementById('speed-slider').value) || 1;
-    
+
     // Limit minimum interval to prevent overwhelming the browser
     const minInterval = 500; // Minimum 500ms between updates
     const interval = Math.max(minInterval, 2000 / speed);
-    
+
     simulationInterval = setInterval(() => {
         simulationTime += 1;
         updateSimulationTime();
-        
+
         // Use requestAnimationFrame for smoother performance
         requestAnimationFrame(() => {
             simulateFireSpread();
@@ -559,7 +562,7 @@ function resetSimulation() {
     pauseSimulation();
     simulationTime = 0;
     updateSimulationTime();
-    
+
     // Clear fire spread layers
     fireSpreadLayers.forEach(layer => {
         simulationMap.removeLayer(layer);
@@ -589,47 +592,47 @@ function simulateFireSpread() {
                 }
             });
         }
-        
+
         // Get environmental parameters
         const windSpeed = parseInt(document.getElementById('wind-speed').textContent) || 15;
         const windDirection = document.getElementById('wind-direction').textContent || 'NE';
         const temperature = parseInt(document.getElementById('temperature').textContent) || 32;
         const humidity = parseInt(document.getElementById('humidity').textContent) || 45;
-        
+
         // Convert wind direction to angle
         const windAngles = {
             'N': 0, 'NE': 45, 'E': 90, 'SE': 135,
             'S': 180, 'SW': 225, 'W': 270, 'NW': 315
         };
         const windAngle = (windAngles[windDirection] || 0) * Math.PI / 180;
-        
+
         // Limit the number of fire sources processed per cycle
         const fireSources = fireSpreadLayers.filter(layer => 
             layer instanceof L.Marker && layer.options.icon.options.className.includes('fire-marker')
         ).slice(-10); // Only process the 10 most recent fire sources
-        
+
         let newSpreadCount = 0;
         const maxNewSpreads = 3; // Limit new spreads per cycle
-        
+
         fireSources.forEach((fireSource) => {
             if (newSpreadCount >= maxNewSpreads) return; // Stop if we've reached the limit
-            
+
             if (Math.random() < 0.4) { // Reduced chance to 40% for better performance
                 const sourceLatlng = fireSource.getLatLng();
-                
+
                 // Simplified spread calculation
                 const baseSpread = 0.005; // Reduced spread distance
                 const windFactor = windSpeed / 20;
                 const tempFactor = temperature / 35;
                 const humidityFactor = (100 - humidity) / 120;
-                
+
                 const spreadDistance = baseSpread * windFactor * tempFactor * humidityFactor;
-                
+
                 // Calculate new position
                 const spreadAngle = windAngle + (Math.random() - 0.5) * Math.PI / 3;
                 const newLat = sourceLatlng.lat + Math.cos(spreadAngle) * spreadDistance;
                 const newLng = sourceLatlng.lng + Math.sin(spreadAngle) * spreadDistance;
-                
+
                 // Create simplified fire marker
                 const spreadMarker = L.marker([newLat, newLng], {
                     icon: L.divIcon({
@@ -639,7 +642,7 @@ function simulateFireSpread() {
                         iconAnchor: [10, 10]
                     })
                 }).addTo(simulationMap);
-                
+
                 // Create smaller burn area
                 const burnRadius = 100 + Math.random() * 50;
                 const burnArea = L.circle([newLat, newLng], {
@@ -649,11 +652,11 @@ function simulateFireSpread() {
                     radius: burnRadius,
                     weight: 1
                 }).addTo(simulationMap);
-                
+
                 fireSpreadLayers.push(spreadMarker);
                 fireSpreadLayers.push(burnArea);
                 newSpreadCount++;
-                
+
                 // Reduced smoke frequency
                 if (Math.random() < 0.1 && newSpreadCount < 2) {
                     const smokeMarker = L.marker([newLat + 0.001, newLng + 0.001], {
@@ -664,7 +667,7 @@ function simulateFireSpread() {
                             iconAnchor: [7, 7]
                         })
                     }).addTo(simulationMap);
-                    
+
                     fireSpreadLayers.push(smokeMarker);
                 }
             }
@@ -683,7 +686,7 @@ function updateSimulationTime() {
 function togglePrediction() {
     const btn = document.getElementById('toggle-prediction');
     const isNextDay = btn.textContent.includes('Current');
-    
+
     if (isNextDay) {
         btn.innerHTML = '<i class="fas fa-clock"></i> Show Next Day Prediction';
         // Show current day data
@@ -703,10 +706,10 @@ function showCurrentDayPrediction() {
         { name: 'Almora District', risk: 'high', percentage: 68 },
         { name: 'Dehradun District', risk: 'moderate', percentage: 42 }
     ]);
-    
+
     // Update map polygons with current colors
     updateMapRiskColors('current');
-    
+
     // Update last update time
     document.getElementById('last-update').textContent = '2 minutes ago';
 }
@@ -719,10 +722,10 @@ function showNextDayPrediction() {
         { name: 'Almora District', risk: 'very-high', percentage: 78 },
         { name: 'Dehradun District', risk: 'high', percentage: 65 }
     ]);
-    
+
     // Update map polygons with predicted colors
     updateMapRiskColors('predicted');
-    
+
     // Update last update time
     document.getElementById('last-update').textContent = 'Predicted for tomorrow';
 }
@@ -731,11 +734,11 @@ function showNextDayPrediction() {
 function updateRiskZones(zones) {
     const riskContainer = document.querySelector('.risk-zones');
     riskContainer.innerHTML = '';
-    
+
     zones.forEach(zone => {
         const riskClass = zone.risk === 'very-high' ? 'high-risk' : 
                          zone.risk === 'high' ? 'moderate-risk' : 'low-risk';
-        
+
         const riskItem = document.createElement('div');
         riskItem.className = `risk-item ${riskClass}`;
         riskItem.innerHTML = `
@@ -758,7 +761,7 @@ function updateMapRiskColors(type) {
             riskMap.removeLayer(layer);
         }
     });
-    
+
     // Define zones based on prediction type
     const zones = type === 'current' ? [
         {
@@ -799,7 +802,7 @@ function updateMapRiskColors(type) {
             color: '#ffa726'  // Orange for increased risk
         }
     ];
-    
+
     // Add updated zones to map
     zones.forEach(zone => {
         const polygon = L.polygon(zone.coords, {
@@ -808,10 +811,10 @@ function updateMapRiskColors(type) {
             fillOpacity: type === 'predicted' ? 0.6 : 0.4,
             weight: type === 'predicted' ? 3 : 2
         }).addTo(riskMap);
-        
+
         const riskLevel = zone.risk.replace('-', ' ').toUpperCase();
         const prefix = type === 'predicted' ? 'Predicted: ' : '';
-        
+
         polygon.bindPopup(`
             <div>
                 <h4>${zone.name}</h4>
@@ -825,16 +828,16 @@ function updateMapRiskColors(type) {
 function startDataUpdates() {
     // Update environmental parameters
     setInterval(updateEnvironmentalData, 30000); // Every 30 seconds
-    
+
     // Update alerts
     setInterval(updateAlerts, 60000); // Every minute
-    
+
     // Update time stamps
     setInterval(updateTimeStamps, 60000); // Every minute
-    
+
     // Update charts
     setInterval(updateChartData, 45000); // Every 45 seconds
-    
+
     // Update fire spread chart during simulation
     setInterval(updateFireSpreadChart, 10000); // Every 10 seconds during simulation
 }
@@ -844,11 +847,11 @@ function updateEnvironmentalData() {
     const windSpeed = Math.floor(Math.random() * 20) + 5;
     const temperature = Math.floor(Math.random() * 15) + 25;
     const humidity = Math.floor(Math.random() * 40) + 30;
-    
+
     document.getElementById('wind-speed').textContent = `${windSpeed} km/h`;
     document.getElementById('temperature').textContent = `${temperature}°C`;
     document.getElementById('humidity').textContent = `${humidity}%`;
-    
+
     // Update wind direction randomly
     const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
     const randomDirection = directions[Math.floor(Math.random() * directions.length)];
@@ -867,7 +870,7 @@ function updateAlerts() {
 function updateTimeStamps() {
     // Update last update time
     document.getElementById('last-update').textContent = 'Just now';
-    
+
     // Reset after a few seconds
     setTimeout(() => {
         document.getElementById('last-update').textContent = '1 minute ago';
@@ -878,7 +881,7 @@ function updateTimeStamps() {
 function updateChartData() {
     if (window.chartInstances && window.chartInstances.riskTimeline) {
         const chart = window.chartInstances.riskTimeline;
-        
+
         // Update each region's data with small realistic variations
         chart.data.datasets.forEach((dataset, index) => {
             dataset.data = dataset.data.map(value => {
@@ -886,13 +889,13 @@ function updateChartData() {
                 return Math.max(0, Math.min(100, value + variation));
             });
         });
-        
+
         chart.update('none'); // Update without animation for smoother real-time feel
     }
-    
+
     // Update gauge values
     updateGaugeValues();
-    
+
     // Update alert statistics
     updateAlertStatistics();
 }
@@ -902,20 +905,20 @@ function updateFireSpreadChart() {
     if (isSimulationRunning && window.chartInstances && window.chartInstances.fireSpread) {
         const chart = window.chartInstances.fireSpread;
         const lastValue = chart.data.datasets[0].data[chart.data.datasets[0].data.length - 1];
-        
+
         // Add new data point based on simulation time
         const timeLabel = simulationTime + 'h';
         const newArea = lastValue + Math.random() * 50 + 20; // Realistic fire spread
-        
+
         // Limit data points to prevent chart overflow
         if (chart.data.labels.length > 10) {
             chart.data.labels.shift();
             chart.data.datasets[0].data.shift();
         }
-        
+
         chart.data.labels.push(timeLabel);
         chart.data.datasets[0].data.push(Math.round(newArea));
-        
+
         chart.update('none');
     }
 }
@@ -925,11 +928,11 @@ function updateGaugeValues() {
     // Accuracy gauge (minor fluctuations around 97%)
     const newAccuracy = Math.max(95, Math.min(99, 97 + (Math.random() - 0.5) * 2));
     document.getElementById('accuracyValue').textContent = newAccuracy.toFixed(1) + '%';
-    
+
     // Uptime gauge (very stable around 99.8%)
     const newUptime = Math.max(99.5, Math.min(100, 99.8 + (Math.random() - 0.5) * 0.3));
     document.getElementById('uptimeValue').textContent = newUptime.toFixed(1) + '%';
-    
+
     // Speed gauge (more variable around 85%)
     const newSpeed = Math.max(70, Math.min(95, 85 + (Math.random() - 0.5) * 10));
     document.getElementById('speedValue').textContent = Math.round(newSpeed) + '%';
@@ -941,7 +944,7 @@ function updateAlertStatistics() {
     const totalAlerts = Math.floor(Math.random() * 20) + 130; // 130-150 range
     const activeFires = Math.floor(Math.random() * 5) + 5; // 5-10 range
     const responseTime = Math.floor(Math.random() * 8) + 8; // 8-16 minutes
-    
+
     document.getElementById('totalAlerts').textContent = totalAlerts;
     document.getElementById('activeFires').textContent = activeFires;
     document.getElementById('responseTime').textContent = responseTime + ' min';
@@ -952,11 +955,11 @@ document.addEventListener('click', function(e) {
     if (e.target.closest('.action-btn')) {
         const btn = e.target.closest('.action-btn');
         const exportType = btn.textContent.trim();
-        
+
         if (exportType.includes('GeoTIFF') || exportType.includes('Shapefiles')) {
             // Simulate export
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Exporting...';
-            
+
             setTimeout(() => {
                 btn.innerHTML = '<i class="fas fa-check"></i> Exported!';
                 setTimeout(() => {
@@ -976,9 +979,39 @@ simulationMap.on('load', function() {
             .setLatLng([30.2, 79.2])
             .setContent('<div style="text-align: center;"><i class="fas fa-hand-pointer" style="color: #ff6b35; margin-right: 5px;"></i><strong>Click anywhere on the map to start a fire!</strong></div>')
             .openOn(simulationMap);
-        
+
         setTimeout(() => {
             simulationMap.closePopup(popup);
         }, 4000);
     }, 1000);
 });
+
+// Update monitoring stats for the new graph
+function updateMonitoringStats() {
+    if (isSimulationRunning) {
+        // Simulate dynamic data for the new graph
+        const burnedArea = Math.random() * 500; // Simulate area burned
+        const fireIntensity = Math.random() * 10; // Simulate intensity
+        const spreadRate = Math.random() * 5; // Simulate spread rate
+
+        document.getElementById('burned-area-stat').textContent = burnedArea.toFixed(0) + ' ha';
+        document.getElementById('fire-intensity-stat').textContent = fireIntensity.toFixed(1);
+        document.getElementById('spread-rate-stat').textContent = spreadRate.toFixed(2) + ' km/h';
+
+        // Update the charts if they exist
+        if (window.chartInstances && window.chartInstances.fireSpread) {
+            const fireSpreadChart = window.chartInstances.fireSpread;
+            // Update the fire spread chart with simulated data if it's not already updated by updateFireSpreadChart
+            // This part might need more sophisticated logic to avoid double updates or conflicts
+        }
+    } else {
+        // Reset stats when simulation is not running
+        document.getElementById('burned-area-stat').textContent = '0 ha';
+        document.getElementById('fire-intensity-stat').textContent = '0.0';
+        document.getElementById('spread-rate-stat').textContent = '0.00 km/h';
+    }
+}
+
+// You might want to call updateMonitoringStats() periodically if the simulation is running
+// For example, within the startSimulation function or a new setInterval
+// setInterval(updateMonitoringStats, 5000); // Update every 5 seconds when simulation is active

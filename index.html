@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,7 +120,7 @@
             <h2>Fire Spread Simulation</h2>
             <p>Interactive Cellular Automata Fire Spread Model</p>
         </div>
-        <div class="section-content">
+        <div class="section-content simulation-layout">
             <div class="simulation-container">
                 <div id="simulation-map" class="map"></div>
                 <div class="simulation-controls">
@@ -147,6 +146,31 @@
                     <div class="time-display">
                         <span>Simulation Time: </span>
                         <span id="simulation-time">0 hours</span>
+                    </div>
+                </div>
+            </div>
+            <div class="simulation-monitoring">
+                <h3>Real-time Simulation Monitoring</h3>
+                <p class="chart-description">Live tracking of fire spread metrics during active simulation</p>
+                <div class="monitoring-chart-container">
+                    <canvas id="simulationMonitoringChart"></canvas>
+                </div>
+                <div class="monitoring-stats">
+                    <div class="monitoring-stat">
+                        <span class="stat-label">Total Area Burned</span>
+                        <span class="stat-value" id="totalBurnedArea">0 ha</span>
+                    </div>
+                    <div class="monitoring-stat">
+                        <span class="stat-label">Fire Perimeter</span>
+                        <span class="stat-value" id="firePerimeter">0 km</span>
+                    </div>
+                    <div class="monitoring-stat">
+                        <span class="stat-label">Spread Rate</span>
+                        <span class="stat-value" id="spreadRate">0 ha/hr</span>
+                    </div>
+                    <div class="monitoring-stat">
+                        <span class="stat-label">Active Fire Sources</span>
+                        <span class="stat-value" id="activeFireSources">0</span>
                     </div>
                 </div>
             </div>

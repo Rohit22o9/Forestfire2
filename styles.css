@@ -326,8 +326,9 @@ html {
 }
 
 /* Fire Simulation Section */
-#fire-simulation .section-content {
-    grid-template-columns: 2fr 1fr;
+.simulation-layout {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr;
     gap: 2rem;
 }
 
@@ -386,6 +387,83 @@ html {
 .parameter-grid {
     display: grid;
     gap: 1rem;
+}
+
+/* Simulation Monitoring Styles */
+.simulation-monitoring {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.simulation-monitoring h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    color: #ff6b35;
+}
+
+.simulation-monitoring .chart-description {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.monitoring-chart-container {
+    height: 200px;
+    position: relative;
+    margin-bottom: 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.monitoring-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.monitoring-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.monitoring-stat:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.monitoring-stat .stat-label {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+}
+
+.monitoring-stat .stat-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ff6b35;
+}
+
+.monitoring-stat .stat-value.active {
+    color: #ff4444;
+    animation: statPulse 2s ease-in-out infinite;
+}
+
+@keyframes statPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
 }
 
 .parameter-item {
@@ -764,9 +842,13 @@ html {
     }
 
     #fire-risk .section-content,
-    #fire-simulation .section-content,
     .alerts-container {
         grid-template-columns: 1fr;
+    }
+
+    .simulation-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
     .analytics-grid {
