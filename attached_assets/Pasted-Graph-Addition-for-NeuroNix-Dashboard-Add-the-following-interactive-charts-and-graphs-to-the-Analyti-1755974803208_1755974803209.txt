@@ -1,0 +1,81 @@
+Graph Addition for NeuroNix Dashboard
+Add the following interactive charts and graphs to the Analytics Dashboard section:
+Required Charts:
+1. Fire Risk Level Over Time (Line Chart)
+
+Multi-line graph showing fire risk changes throughout the day/week
+X-axis: Time (hours/days)
+Y-axis: Risk level (0-100% or Low/Moderate/High/Very High)
+Different colored lines for major regions in Uttarakhand (Dehradun, Nainital, Haridwar, Rishikesh)
+Real-time updating with smooth animations
+Hover tooltips showing exact risk values and timestamps
+Legend to identify different regions
+
+2. Fire Spread Simulation Timeline (Area Chart)
+
+Area chart showing burned area expansion over time during simulation
+X-axis: Time progression (1hr, 2hr, 3hr, 6hr intervals)
+Y-axis: Area burned (in hectares)
+Gradient fill from orange to deep red showing fire intensity
+Updates dynamically when fire simulation is running
+Toggle options to switch between different simulation scenarios
+Smooth transitions when data updates
+
+3. Model Accuracy & Performance (Gauge Charts)
+
+Three circular gauge charts:
+
+Prediction accuracy gauge (showing 97%)
+System uptime percentage gauge
+Data processing speed indicator
+
+
+Color-coded performance indicators:
+
+Green: Good performance (80-100%)
+Yellow: Warning (60-79%)
+Red: Critical (below 60%)
+
+
+Animated needle movements and percentage counters
+Digital display showing exact values
+
+4. Alert Statistics (Pie Chart)
+
+Interactive pie chart showing distribution of alert types
+Categories:
+
+Fire Risk Warnings (35%)
+Active Fire Detected (25%)
+Evacuation Alerts (20%)
+All Clear/Safe Zones (20%)
+
+
+Color-coded segments with distinct colors for each category
+Interactive segments that show detailed information on hover/click
+Legend with alert counts and percentages
+Real-time updates as new alerts are generated
+Animation when chart loads or updates
+
+Chart Specifications:
+
+Use Chart.js or similar charting library for all graphs
+Responsive design - charts should resize for mobile/tablet
+Consistent color scheme matching the dashboard theme (dark blue background, orange/red for fire elements)
+Smooth animations for all chart interactions and updates
+Professional styling with clean typography and proper spacing
+Interactive tooltips for all charts showing detailed information
+
+Sample Data Generation:
+
+Fire Risk Data: Generate realistic hourly/daily risk patterns showing peak hours (afternoon) and safer periods (early morning)
+Simulation Data: Create progressive area expansion data showing realistic fire spread rates
+Performance Metrics: Maintain consistent high accuracy (95-99%) with occasional minor fluctuations
+Alert Distribution: Realistic proportions with more warnings than actual fire detections
+
+Layout:
+
+Grid layout arranging all 4 charts in a visually appealing 2x2 or responsive layout
+Chart titles and descriptions for each visualization
+Proper spacing between charts for clean appearance
+Mobile responsive - stack charts vertically on smaller screens
