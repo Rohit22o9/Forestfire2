@@ -349,6 +349,8 @@ html {
     align-items: center;
     gap: 1rem;
     z-index: 1000;
+    flex-wrap: wrap;
+    min-height: 60px;
 }
 
 .control-group {
@@ -361,20 +363,24 @@ html {
     align-items: center;
     gap: 0.5rem;
     color: #ffffff;
+    flex-shrink: 0;
+    min-width: 0;
 }
 
 .speed-control label {
     font-size: 0.9rem;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .speed-control input[type="range"] {
-    width: 100px;
+    width: 80px;
     height: 6px;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 3px;
     outline: none;
     -webkit-appearance: none;
+    flex-shrink: 0;
 }
 
 .speed-control input[type="range"]::-webkit-slider-thumb {
@@ -400,6 +406,7 @@ html {
     font-weight: 600;
     color: #ff6b35;
     min-width: 25px;
+    white-space: nowrap;
 }
 
 .time-display {
