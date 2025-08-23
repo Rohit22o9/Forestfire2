@@ -802,40 +802,22 @@ html {
 }
 
 @keyframes fireFlicker {
-    0% {
-        transform: scale(1) rotate(-1deg);
+    0%, 100% {
+        transform: scale(1);
         color: #ff4444;
-    }
-    25% {
-        transform: scale(1.05) rotate(1deg);
-        color: #ff6b35;
     }
     50% {
-        transform: scale(0.98) rotate(-0.5deg);
-        color: #ffa726;
-    }
-    75% {
-        transform: scale(1.02) rotate(0.8deg);
+        transform: scale(1.1);
         color: #ff6b35;
-    }
-    100% {
-        transform: scale(1) rotate(0deg);
-        color: #ff4444;
     }
 }
 
 @keyframes fireGlow {
-    0% {
-        transform: scale(1);
-        opacity: 0.8;
-    }
-    50% {
-        transform: scale(1.2);
+    0%, 100% {
         opacity: 0.6;
     }
-    100% {
-        transform: scale(1);
-        opacity: 0.8;
+    50% {
+        opacity: 0.9;
     }
 }
 
