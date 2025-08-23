@@ -255,17 +255,34 @@ function initializeSimulation() {
 
 // Fire simulation functions
 function startFireSimulation(latlng) {
-    // Add fire origin marker
+    // Add animated fire origin marker with enhanced visuals
     const fireMarker = L.marker([latlng.lat, latlng.lng], {
         icon: L.divIcon({
-            className: 'fire-marker',
-            html: '<i class="fas fa-fire" style="color: #ff4444; font-size: 20px;"></i>',
-            iconSize: [30, 30],
-            iconAnchor: [15, 15]
+            className: 'fire-marker origin-fire',
+            html: `
+                <div class="fire-icon-container">
+                    <i class="fas fa-fire fire-flame"></i>
+                    <div class="fire-glow"></div>
+                    <div class="fire-sparks"></div>
+                </div>
+            `,
+            iconSize: [40, 40],
+            iconAnchor: [20, 20]
         })
     }).addTo(simulationMap);
     
     fireSpreadLayers.push(fireMarker);
+    
+    // Add initial burn circle
+    const initialBurn = L.circle([latlng.lat, latlng.lng], {
+        color: '#ff6b35',
+        fillColor: '#ff4444',
+        fillOpacity: 0.7,
+        radius: 200,
+        className: 'fire-burn-area'
+    }).addTo(simulationMap);
+    
+    fireSpreadLayers.push(initialBurn);
 }
 
 function startSimulation() {
@@ -306,25 +323,96 @@ function updateSimulationSpeed(speed) {
 }
 
 function simulateFireSpread() {
-    // Simple fire spread simulation
+    // Enhanced fire spread simulation with realistic patterns
     if (fireSpreadLayers.length > 0) {
-        const lastFire = fireSpreadLayers[fireSpreadLayers.length - 1];
-        const latlng = lastFire.getLatLng();
+        // Get wind direction and speed for realistic spread
+        const windSpeed = parseInt(document.getElementById('wind-speed').textContent) || 15;
+        const windDirection = document.getElementById('wind-direction').textContent || 'NE';
+        const temperature = parseInt(document.getElementById('temperature').textContent) || 32;
+        const humidity = parseInt(document.getElementById('humidity').textContent) || 45;
         
-        // Simulate spread in random direction (simplified)
-        const spreadRadius = 0.01;
-        const angle = Math.random() * 2 * Math.PI;
-        const newLat = latlng.lat + Math.cos(angle) * spreadRadius;
-        const newLng = latlng.lng + Math.sin(angle) * spreadRadius;
+        // Convert wind direction to angle
+        const windAngles = {
+            'N': 0, 'NE': 45, 'E': 90, 'SE': 135,
+            'S': 180, 'SW': 225, 'W': 270, 'NW': 315
+        };
+        const windAngle = (windAngles[windDirection] || 0) * Math.PI / 180;
         
-        const spreadCircle = L.circle([newLat, newLng], {
-            color: '#ff6b35',
-            fillColor: '#ff6b35',
-            fillOpacity: 0.6,
-            radius: 500
-        }).addTo(simulationMap);
+        // Find all fire sources for spreading
+        const fireSources = fireSpreadLayers.filter(layer => 
+            layer instanceof L.Marker || (layer instanceof L.Circle && layer.getRadius() > 0)
+        );
         
-        fireSpreadLayers.push(spreadCircle);
+        fireSources.forEach((fireSource, index) => {
+            if (Math.random() < 0.7) { // 70% chance of spread per fire source
+                const sourceLatlng = fireSource.getLatLng ? fireSource.getLatLng() : fireSource.getCenter();
+                
+                // Calculate spread distance based on environmental factors
+                const baseSpread = 0.008;
+                const windFactor = windSpeed / 15; // Normalize wind speed
+                const tempFactor = temperature / 30; // Normalize temperature
+                const humidityFactor = (100 - humidity) / 100; // Lower humidity = faster spread
+                
+                const spreadDistance = baseSpread * windFactor * tempFactor * humidityFactor;
+                
+                // Bias spread direction towards wind direction with some randomness
+                const spreadAngle = windAngle + (Math.random() - 0.5) * Math.PI / 2;
+                const randomFactor = 0.3; // Add some randomness
+                
+                const newLat = sourceLatlng.lat + 
+                    Math.cos(spreadAngle) * spreadDistance * (1 + (Math.random() - 0.5) * randomFactor);
+                const newLng = sourceLatlng.lng + 
+                    Math.sin(spreadAngle) * spreadDistance * (1 + (Math.random() - 0.5) * randomFactor);
+                
+                // Create fire spread with animated marker
+                const spreadMarker = L.marker([newLat, newLng], {
+                    icon: L.divIcon({
+                        className: 'fire-marker spread-fire',
+                        html: `
+                            <div class="fire-icon-container small">
+                                <i class="fas fa-fire fire-flame"></i>
+                                <div class="fire-glow small"></div>
+                            </div>
+                        `,
+                        iconSize: [25, 25],
+                        iconAnchor: [12, 12]
+                    })
+                }).addTo(simulationMap);
+                
+                // Add burn area around the new fire
+                const burnRadius = 150 + Math.random() * 100; // Vary burn area size
+                const burnArea = L.circle([newLat, newLng], {
+                    color: '#ff4444',
+                    fillColor: '#cc0000',
+                    fillOpacity: 0.4 + Math.random() * 0.3,
+                    radius: burnRadius,
+                    className: 'fire-burn-area'
+                }).addTo(simulationMap);
+                
+                fireSpreadLayers.push(spreadMarker);
+                fireSpreadLayers.push(burnArea);
+                
+                // Add smoke effect occasionally
+                if (Math.random() < 0.3) {
+                    const smokeMarker = L.marker([newLat + 0.001, newLng + 0.001], {
+                        icon: L.divIcon({
+                            className: 'smoke-marker',
+                            html: '<i class="fas fa-cloud smoke-cloud"></i>',
+                            iconSize: [20, 20],
+                            iconAnchor: [10, 10]
+                        })
+                    }).addTo(simulationMap);
+                    
+                    fireSpreadLayers.push(smokeMarker);
+                }
+            }
+        });
+        
+        // Limit total fire spread layers to prevent performance issues
+        if (fireSpreadLayers.length > 200) {
+            const excessLayers = fireSpreadLayers.splice(0, 50);
+            excessLayers.forEach(layer => simulationMap.removeLayer(layer));
+        }
     }
 }
 
@@ -546,12 +634,16 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Add some CSS for fire marker
-const style = document.createElement('style');
-style.textContent = `
-    .fire-marker {
-        background: transparent !important;
-        border: none !important;
-    }
-`;
-document.head.appendChild(style);
+// Add click instruction popup when simulation map loads
+simulationMap.on('load', function() {
+    setTimeout(() => {
+        const popup = L.popup()
+            .setLatLng([30.2, 79.2])
+            .setContent('<div style="text-align: center;"><i class="fas fa-hand-pointer" style="color: #ff6b35; margin-right: 5px;"></i><strong>Click anywhere on the map to start a fire!</strong></div>')
+            .openOn(simulationMap);
+        
+        setTimeout(() => {
+            simulationMap.closePopup(popup);
+        }, 4000);
+    }, 1000);
+});
