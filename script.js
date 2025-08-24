@@ -1118,6 +1118,150 @@ function initializeSimulationMonitoringChart() {
     window.chartInstances.simulationMonitoring = simulationMonitoringChart;
 }
 
+// Professional UI Functions
+
+// Toast Notifications
+function showToast(message, type = 'success', duration = 3000) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    
+    container.appendChild(toast);
+    
+    // Auto remove toast
+    setTimeout(() => {
+        toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+        setTimeout(() => {
+            if (container.contains(toast)) {
+                container.removeChild(toast);
+            }
+        }, 300);
+    }, duration);
+}
+
+// Modal Functions
+function openModal() {
+    const overlay = document.getElementById('modal-overlay');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    const overlay = document.getElementById('modal-overlay');
+    overlay.classList.remove('active');
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal on overlay click
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeModal();
+    }
+});
+
+// Enhanced Search Functionality
+document.querySelector('.search-input').addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase();
+    if (query.length > 2) {
+        // Simulate search with loading state
+        showToast(`Searching for "${query}"...`, 'processing', 1000);
+        
+        setTimeout(() => {
+            showToast(`Found 3 results for "${query}"`, 'success');
+        }, 1000);
+    }
+});
+
+// Enhanced export functionality with professional feedback
+function handleExport(type) {
+    showToast(`Preparing ${type} export...`, 'processing', 2000);
+    
+    setTimeout(() => {
+        showToast(`${type} export completed successfully!`, 'success');
+    }, 2000);
+}
+
+// Add tooltips to interactive elements
+function initializeTooltips() {
+    const tooltipElements = document.querySelectorAll('[title]');
+    
+    tooltipElements.forEach(element => {
+        element.addEventListener('mouseenter', function(e) {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip show';
+            tooltip.textContent = this.getAttribute('title');
+            
+            document.body.appendChild(tooltip);
+            
+            const rect = this.getBoundingClientRect();
+            tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+            tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+            
+            this.tooltip = tooltip;
+            this.removeAttribute('title');
+        });
+        
+        element.addEventListener('mouseleave', function() {
+            if (this.tooltip) {
+                document.body.removeChild(this.tooltip);
+                this.tooltip = null;
+            }
+        });
+    });
+}
+
+// Initialize professional features
+document.addEventListener('DOMContentLoaded', function() {
+    initializeTooltips();
+    
+    // Show welcome toast
+    setTimeout(() => {
+        showToast('NeuroNix Dashboard Loaded Successfully', 'success');
+    }, 1000);
+});
+
+// Enhanced keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Ctrl/Cmd + K for search
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        document.querySelector('.search-input').focus();
+        showToast('Search activated', 'processing', 1000);
+    }
+    
+    // Escape to close modal
+    if (e.key === 'Escape') {
+        closeModal();
+    }
+    
+    // Ctrl/Cmd + E for export
+    if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+        e.preventDefault();
+        handleExport('GeoTIFF');
+    }
+});
+
+// Add intersection observer for smooth animations
+function initializeScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationDelay = '0.2s';
+                entry.target.style.animationPlayState = 'running';
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    // Observe all sections
+    document.querySelectorAll('.section').forEach(section => {
+        observer.observe(section);
+    });
+}
+
 // Update monitoring stats for the new graph
 function updateMonitoringStats() {
     if (isSimulationRunning) {

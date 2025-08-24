@@ -26,14 +26,20 @@
                 <a href="#data-sources" class="nav-link">Data Sources</a>
                 <a href="#analytics" class="nav-link">Analytics</a>
             </nav>
-            <div class="header-status">
-                <div class="status-indicator">
-                    <span class="status-dot active"></span>
-                    <span class="status-text">System Online</span>
+            <div class="header-controls">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search alerts, regions, data...">
                 </div>
-                <div class="last-update">
-                    <i class="fas fa-sync-alt"></i>
-                    <span id="header-update-time">2 min ago</span>
+                <div class="header-status">
+                    <div class="status-indicator">
+                        <span class="status-dot active"></span>
+                        <span class="status-text">System Online</span>
+                    </div>
+                    <div class="last-update">
+                        <i class="fas fa-sync-alt"></i>
+                        <span id="header-update-time">2 min ago</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -547,6 +553,31 @@
             </div>
         </div>
     </section>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">System Information</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-content">
+                <p>NeuroNix Forest Fire Intelligence Platform - Advanced monitoring and prediction system for forest fire management in Uttarakhand State, India.</p>
+                <div class="status-badge online">
+                    <span class="status-dot"></span>
+                    All Systems Operational
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" onclick="openModal()" title="System Info">
+        <i class="fas fa-info"></i>
+    </button>
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
