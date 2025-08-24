@@ -245,6 +245,7 @@ html {
     opacity: 0;
     transform: translateY(30px);
     animation: fadeInUp 0.8s ease-out forwards;
+    overflow-x: hidden;
 }
 
 @keyframes fadeInUp {
@@ -1082,6 +1083,11 @@ html {
 
 .analytics-card.full-width {
     grid-column: 1 / -1;
+    margin-left: -2rem;
+    margin-right: -2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border-radius: 0 16px 16px 0;
 }
 
 .analytics-card.wide {
