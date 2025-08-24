@@ -74,13 +74,13 @@ html {
 .header-controls {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 3rem;
 }
 
 .header-status {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 2.5rem;
     font-size: 0.9rem;
 }
 
@@ -173,10 +173,10 @@ html {
 
 .nav-menu {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
     background: rgba(15, 23, 42, 0.6);
     border-radius: 12px;
-    padding: 0.5rem;
+    padding: 0.75rem;
     backdrop-filter: blur(8px);
     border: 1px solid rgba(51, 65, 85, 0.3);
 }
@@ -184,7 +184,7 @@ html {
 .nav-link {
     color: #CBD5E1;
     text-decoration: none;
-    padding: 0.75rem 1.25rem;
+    padding: 0.75rem 1.5rem;
     border-radius: 8px;
     font-weight: 500;
     font-size: 0.9rem;
@@ -679,22 +679,35 @@ html {
 
 .monitoring-stats {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
 }
 
 .monitoring-stat {
     text-align: center;
-    padding: 1rem;
+    padding: 1.5rem 2rem;
     background: rgba(30, 41, 59, 0.4);
     border-radius: 12px;
     border: 1px solid rgba(59, 130, 246, 0.1);
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.monitoring-stat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3B82F6, #10B981);
 }
 
 .monitoring-stat:hover {
     background: rgba(59, 130, 246, 0.05);
     transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
 }
 
 .monitoring-stat .stat-label {
@@ -740,17 +753,30 @@ html {
 .parameter-item {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
     background: rgba(30, 41, 59, 0.3);
     border-radius: 12px;
     border: 1px solid rgba(59, 130, 246, 0.1);
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.parameter-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3B82F6, #10B981);
 }
 
 .parameter-item:hover {
     background: rgba(59, 130, 246, 0.05);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
 }
 
 .parameter-icon {
