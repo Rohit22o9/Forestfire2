@@ -797,9 +797,9 @@ html {
 }
 
 #fire-risk .section-content {
-    grid-template-columns: 1.5fr 1fr;
-    gap: 2rem;
-    max-width: 1400px;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 1.5rem;
+    max-width: 95vw;
     margin: 0 auto;
     display: grid;
     align-items: start;
@@ -817,7 +817,7 @@ html {
 }
 
 .map {
-    height: 500px;
+    height: 600px;
     border-radius: 20px;
 }
 
@@ -869,8 +869,8 @@ html {
     backdrop-filter: blur(16px);
     border: 1px solid rgba(59, 130, 246, 0.15);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    height: 500px;
-    max-width: 350px;
+    height: 600px;
+    min-width: 400px;
     overflow-y: auto;
 }
 
@@ -2305,6 +2305,7 @@ html {
     #fire-risk .section-content {
         grid-template-columns: 1fr;
         gap: 2rem;
+        max-width: 95vw;
     }
 
     .dashboard-main-content {
@@ -2330,6 +2331,11 @@ html {
     .quick-actions-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
+    }
+
+    .risk-panel {
+        min-width: auto;
+        width: 100%;
     }
 }
 
