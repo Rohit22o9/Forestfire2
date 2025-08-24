@@ -16,7 +16,7 @@
             <div class="logo">
                 <i class="fas fa-fire-flame-curved"></i>
                 <span>NeuroNix</span>
-                <div class="tagline">Forest Fire Intelligence Platform</div>
+                <div class="tagline" style="white-space: nowrap;">Forest Fire Intelligence Platform</div>
             </div>
             <nav class="nav-menu">
                 <a href="#home" class="nav-link active">Dashboard</a>
@@ -476,22 +476,28 @@
                         <div class="gauge-item">
                             <div class="gauge-wrapper">
                                 <canvas id="accuracyGauge"></canvas>
-                                <div class="gauge-label">Prediction Accuracy</div>
-                                <div class="gauge-value" id="accuracyValue">97%</div>
+                                <div class="gauge-info">
+                                    <div class="gauge-label">Prediction Accuracy</div>
+                                    <div class="gauge-value" id="accuracyValue">97%</div>
+                                </div>
                             </div>
                         </div>
                         <div class="gauge-item">
                             <div class="gauge-wrapper">
                                 <canvas id="uptimeGauge"></canvas>
-                                <div class="gauge-label">System Uptime</div>
-                                <div class="gauge-value" id="uptimeValue">99.8%</div>
+                                <div class="gauge-info">
+                                    <div class="gauge-label">System Uptime</div>
+                                    <div class="gauge-value" id="uptimeValue">99.8%</div>
+                                </div>
                             </div>
                         </div>
                         <div class="gauge-item">
                             <div class="gauge-wrapper">
                                 <canvas id="speedGauge"></canvas>
-                                <div class="gauge-label">Processing Speed</div>
-                                <div class="gauge-value" id="speedValue">85%</div>
+                                <div class="gauge-info">
+                                    <div class="gauge-label">Processing Speed</div>
+                                    <div class="gauge-value" id="speedValue">85%</div>
+                                </div>
                             </div>
                         </div>
                     </div>
