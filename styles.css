@@ -174,10 +174,11 @@ html {
 .nav-menu {
     display: flex;
     gap: 0.5rem;
-    background: rgba(51, 65, 85, 0.3);
+    background: rgba(15, 23, 42, 0.6);
     border-radius: 12px;
     padding: 0.5rem;
     backdrop-filter: blur(8px);
+    border: 1px solid rgba(51, 65, 85, 0.3);
 }
 
 .nav-link {
@@ -209,10 +210,12 @@ html {
 
 .nav-link:hover,
 .nav-link.active {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(16, 185, 129, 0.1));
-    color: #3B82F6;
+    background: rgba(51, 65, 85, 0.6);
+    color: #F8FAFC;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    border-radius: 8px;
 }
 
 /* Enhanced Section Styles */
