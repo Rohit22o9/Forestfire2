@@ -354,13 +354,15 @@ html {
 /* Enhanced Content Sections */
 .section-content {
     display: grid;
-    gap: 3rem;
+    gap: 2rem;
     align-items: start;
 }
 
 #fire-risk .section-content {
-    grid-template-columns: 2fr 1fr;
-    gap: 3rem;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 /* Professional Map Container */
@@ -421,13 +423,14 @@ html {
 
 /* Enhanced Risk Panel */
 .risk-panel {
-    background: rgba(51, 65, 85, 0.2);
-    border-radius: 20px;
-    padding: 2rem;
+    background: rgba(30, 41, 59, 0.9);
+    border-radius: 16px;
+    padding: 1.5rem;
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(59, 130, 246, 0.1);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     height: fit-content;
+    max-width: 350px;
 }
 
 .panel-header {
@@ -457,11 +460,11 @@ html {
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1.25rem;
-    margin-bottom: 0.75rem;
-    border-radius: 12px;
-    background: rgba(30, 41, 59, 0.3);
-    border: 1px solid rgba(59, 130, 246, 0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.6);
+    border: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -575,9 +578,11 @@ html {
 /* Enhanced Simulation Layout */
 .simulation-layout {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 3rem;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
     align-items: start;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .simulation-container {
@@ -639,14 +644,14 @@ html {
 
 /* Enhanced Monitoring Panel */
 .simulation-monitoring {
-    background: rgba(51, 65, 85, 0.2);
-    border-radius: 20px;
-    padding: 2rem;
+    background: rgba(30, 41, 59, 0.9);
+    border-radius: 16px;
+    padding: 1.5rem;
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(59, 130, 246, 0.1);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-    height: 600px;
-    overflow-y: auto;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    height: auto;
+    min-height: 500px;
 }
 
 .monitoring-chart-container {
@@ -659,16 +664,17 @@ html {
 
 .monitoring-stats {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
 .monitoring-stat {
-    text-align: center;
-    padding: 1.5rem 2rem;
-    background: rgba(30, 41, 59, 0.4);
-    border-radius: 12px;
-    border: 1px solid rgba(59, 130, 246, 0.1);
+    text-align: left;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 8px;
+    border: none;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -708,14 +714,14 @@ html {
 
 /* Enhanced Parameters Panel */
 .parameters-panel {
-    background: rgba(51, 65, 85, 0.2);
-    border-radius: 20px;
-    padding: 2rem;
+    background: rgba(30, 41, 59, 0.9);
+    border-radius: 16px;
+    padding: 1.5rem;
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(59, 130, 246, 0.1);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-    height: 600px;
-    overflow-y: auto;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    height: auto;
+    min-height: 500px;
 }
 
 .parameters-panel h3 {
@@ -733,14 +739,15 @@ html {
 .parameter-item {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem 2rem;
-    background: rgba(30, 41, 59, 0.3);
-    border-radius: 12px;
-    border: 1px solid rgba(59, 130, 246, 0.1);
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 8px;
+    border: none;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    margin-bottom: 0.75rem;
 }
 
 .parameter-item::before {
@@ -1048,17 +1055,19 @@ html {
 /* Enhanced Analytics Section */
 .analytics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .analytics-card {
-    background: rgba(51, 65, 85, 0.2);
-    border-radius: 20px;
-    padding: 2rem;
+    background: rgba(30, 41, 59, 0.9);
+    border-radius: 16px;
+    padding: 1.5rem;
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(59, 130, 246, 0.1);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 }
 
@@ -1078,12 +1087,20 @@ html {
     margin-bottom: 0.5rem;
 }
 
+.chart-description {
+    color: #94A3B8;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
 .chart-container {
     height: 300px;
-    background: rgba(30, 41, 59, 0.3);
-    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 8px;
     border: 1px solid rgba(59, 130, 246, 0.1);
     position: relative;
+    padding: 1rem;
 }
 
 .gauge-container {
