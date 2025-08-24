@@ -852,6 +852,12 @@ function startDataUpdates() {
 
     // Update fire spread chart during simulation
     setInterval(updateFireSpreadChart, 10000); // Every 10 seconds during simulation
+
+    // Update activity feed
+    setInterval(updateActivityFeed, 45000); // Every 45 seconds
+
+    // Update environmental conditions
+    setInterval(updateEnvironmentalConditions, 35000); // Every 35 seconds
 }
 
 function updateEnvironmentalData() {
@@ -1241,6 +1247,127 @@ document.addEventListener('keydown', function(e) {
         handleExport('GeoTIFF');
     }
 });
+
+// Scroll to section function for quick actions
+function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+        showToast(`Navigating to ${sectionId.replace('-', ' ')} section`, 'processing', 1500);
+    }
+}
+
+// Download report function
+function downloadReport() {
+    showToast('Generating daily risk report...', 'processing', 2000);
+    
+    setTimeout(() => {
+        showToast('Daily risk report downloaded successfully!', 'success');
+        
+        // Simulate file download
+        const link = document.createElement('a');
+        link.href = 'data:text/plain;charset=utf-8,NeuroNix Daily Fire Risk Report\n\nGenerated: ' + new Date().toLocaleString() + '\n\nOverall Risk Level: High\nTotal Monitored Area: 53,483 km²\nActive Sensors: 247\nPrediction Accuracy: 97.2%';
+        link.download = 'neuronix-daily-report-' + new Date().toISOString().split('T')[0] + '.txt';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }, 2000);
+}
+
+// Update activity feed with live data
+function updateActivityFeed() {
+    const activities = [
+        {
+            icon: 'fas fa-satellite-dish',
+            title: 'Satellite Data Updated',
+            description: 'New MODIS imagery processed for Nainital region',
+            time: '2 minutes ago'
+        },
+        {
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Risk Level Updated',
+            description: 'Almora District elevated to High Risk status',
+            time: '8 minutes ago'
+        },
+        {
+            icon: 'fas fa-cloud-sun',
+            title: 'Weather Data Sync',
+            description: 'ERA5 meteorological data synchronized',
+            time: '15 minutes ago'
+        },
+        {
+            icon: 'fas fa-brain',
+            title: 'AI Model Analysis',
+            description: 'Neural network completed risk assessment cycle',
+            time: '22 minutes ago'
+        },
+        {
+            icon: 'fas fa-shield-alt',
+            title: 'System Health Check',
+            description: 'All monitoring systems operational',
+            time: '28 minutes ago'
+        }
+    ];
+
+    // Rotate activities to simulate live updates
+    const activityFeed = document.querySelector('.activity-feed');
+    if (activityFeed) {
+        // Add random new activity occasionally
+        if (Math.random() < 0.1) { // 10% chance
+            const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+            const newActivityHtml = `
+                <div class="activity-item new">
+                    <div class="activity-icon">
+                        <i class="${randomActivity.icon}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">${randomActivity.title}</div>
+                        <div class="activity-description">${randomActivity.description}</div>
+                        <div class="activity-time">Just now</div>
+                    </div>
+                </div>
+            `;
+            
+            activityFeed.insertAdjacentHTML('afterbegin', newActivityHtml);
+            
+            // Remove old activities to keep feed manageable
+            const activityItems = activityFeed.querySelectorAll('.activity-item');
+            if (activityItems.length > 5) {
+                activityItems[activityItems.length - 1].remove();
+            }
+            
+            // Remove 'new' class from previous items
+            activityItems.forEach((item, index) => {
+                if (index > 0) {
+                    item.classList.remove('new');
+                }
+            });
+        }
+    }
+}
+
+// Update environmental conditions
+function updateEnvironmentalConditions() {
+    // Update condition values with realistic variations
+    const temperatureEl = document.querySelector('.condition-card.temperature .condition-value');
+    const humidityEl = document.querySelector('.condition-card.humidity .condition-value');
+    const windEl = document.querySelector('.condition-card.wind .condition-value');
+    
+    if (temperatureEl) {
+        const newTemp = Math.floor(Math.random() * 8) + 28; // 28-36°C
+        temperatureEl.textContent = newTemp + '°C';
+    }
+    
+    if (humidityEl) {
+        const newHumidity = Math.floor(Math.random() * 30) + 35; // 35-65%
+        humidityEl.textContent = newHumidity + '%';
+    }
+    
+    if (windEl) {
+        const newWind = Math.floor(Math.random() * 15) + 8; // 8-23 km/h
+        windEl.textContent = newWind + ' km/h';
+    }
+}
 
 // Add intersection observer for smooth animations
 function initializeScrollAnimations() {

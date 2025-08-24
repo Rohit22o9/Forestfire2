@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,6 +89,275 @@
                     <div class="stat-info">
                         <div class="stat-number">247</div>
                         <div class="stat-label">Active Sensors</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Real-time System Status Dashboard -->
+            <div class="dashboard-main-content">
+                <!-- Live Activity Feed -->
+                <div class="activity-feed-section">
+                    <div class="section-title">
+                        <h3>Live Activity Feed</h3>
+                        <div class="live-indicator">
+                            <span class="status-dot active"></span>
+                            <span>Live Updates</span>
+                        </div>
+                    </div>
+                    <div class="activity-feed">
+                        <div class="activity-item new">
+                            <div class="activity-icon">
+                                <i class="fas fa-satellite-dish"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Satellite Data Updated</div>
+                                <div class="activity-description">New MODIS imagery processed for Nainital region</div>
+                                <div class="activity-time">2 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Risk Level Updated</div>
+                                <div class="activity-description">Almora District elevated to High Risk status</div>
+                                <div class="activity-time">8 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-cloud-sun"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">Weather Data Sync</div>
+                                <div class="activity-description">ERA5 meteorological data synchronized</div>
+                                <div class="activity-time">15 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">AI Model Analysis</div>
+                                <div class="activity-description">Neural network completed risk assessment cycle</div>
+                                <div class="activity-time">22 minutes ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Panel -->
+                <div class="quick-actions-section">
+                    <div class="section-title">
+                        <h3>Quick Actions</h3>
+                        <span class="section-subtitle">Instant access to key functions</span>
+                    </div>
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-btn" onclick="scrollToSection('fire-risk')">
+                            <div class="action-icon">
+                                <i class="fas fa-chart-area"></i>
+                            </div>
+                            <div class="action-text">
+                                <span class="action-title">View Risk Map</span>
+                                <span class="action-subtitle">Current fire risk analysis</span>
+                            </div>
+                        </button>
+                        <button class="quick-action-btn" onclick="scrollToSection('fire-simulation')">
+                            <div class="action-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="action-text">
+                                <span class="action-title">Start Simulation</span>
+                                <span class="action-subtitle">Fire spread modeling</span>
+                            </div>
+                        </button>
+                        <button class="quick-action-btn" onclick="scrollToSection('alerts')">
+                            <div class="action-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div class="action-text">
+                                <span class="action-title">Active Alerts</span>
+                                <span class="action-subtitle">Critical notifications</span>
+                            </div>
+                        </button>
+                        <button class="quick-action-btn" onclick="downloadReport()">
+                            <div class="action-icon">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <div class="action-text">
+                                <span class="action-title">Download Report</span>
+                                <span class="action-subtitle">Daily risk summary</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Current Conditions Overview -->
+                <div class="conditions-overview">
+                    <div class="section-title">
+                        <h3>Current Environmental Conditions</h3>
+                        <span class="section-subtitle">Real-time monitoring across Uttarakhand</span>
+                    </div>
+                    <div class="conditions-grid">
+                        <div class="condition-card temperature">
+                            <div class="condition-header">
+                                <div class="condition-icon">
+                                    <i class="fas fa-thermometer-half"></i>
+                                </div>
+                                <div class="condition-info">
+                                    <span class="condition-label">Temperature</span>
+                                    <span class="condition-location">Avg. Statewide</span>
+                                </div>
+                            </div>
+                            <div class="condition-value">32°C</div>
+                            <div class="condition-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                +2.5° from yesterday
+                            </div>
+                        </div>
+                        <div class="condition-card humidity">
+                            <div class="condition-header">
+                                <div class="condition-icon">
+                                    <i class="fas fa-tint"></i>
+                                </div>
+                                <div class="condition-info">
+                                    <span class="condition-label">Humidity</span>
+                                    <span class="condition-location">Avg. Statewide</span>
+                                </div>
+                            </div>
+                            <div class="condition-value">45%</div>
+                            <div class="condition-trend down">
+                                <i class="fas fa-arrow-down"></i>
+                                -8% from yesterday
+                            </div>
+                        </div>
+                        <div class="condition-card wind">
+                            <div class="condition-header">
+                                <div class="condition-icon">
+                                    <i class="fas fa-wind"></i>
+                                </div>
+                                <div class="condition-info">
+                                    <span class="condition-label">Wind Speed</span>
+                                    <span class="condition-location">Avg. Statewide</span>
+                                </div>
+                            </div>
+                            <div class="condition-value">15 km/h</div>
+                            <div class="condition-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                +3 km/h from yesterday
+                            </div>
+                        </div>
+                        <div class="condition-card risk">
+                            <div class="condition-header">
+                                <div class="condition-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="condition-info">
+                                    <span class="condition-label">Fire Danger</span>
+                                    <span class="condition-location">Overall Rating</span>
+                                </div>
+                            </div>
+                            <div class="condition-value">High</div>
+                            <div class="condition-trend critical">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Elevated conditions
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regional Risk Summary -->
+                <div class="regional-summary">
+                    <div class="section-title">
+                        <h3>Regional Risk Summary</h3>
+                        <span class="section-subtitle">Current fire risk by district</span>
+                    </div>
+                    <div class="regional-grid">
+                        <div class="region-card very-high-risk">
+                            <div class="region-header">
+                                <span class="region-name">Nainital</span>
+                                <span class="risk-badge very-high">Very High</span>
+                            </div>
+                            <div class="risk-percentage">85%</div>
+                            <div class="region-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-thermometer-three-quarters"></i>
+                                    <span>35°C</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-tint"></i>
+                                    <span>38%</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-wind"></i>
+                                    <span>18 km/h</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="region-card high-risk">
+                            <div class="region-header">
+                                <span class="region-name">Almora</span>
+                                <span class="risk-badge high">High</span>
+                            </div>
+                            <div class="risk-percentage">68%</div>
+                            <div class="region-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-thermometer-half"></i>
+                                    <span>31°C</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-tint"></i>
+                                    <span>42%</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-wind"></i>
+                                    <span>16 km/h</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="region-card moderate-risk">
+                            <div class="region-header">
+                                <span class="region-name">Dehradun</span>
+                                <span class="risk-badge moderate">Moderate</span>
+                            </div>
+                            <div class="risk-percentage">42%</div>
+                            <div class="region-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-thermometer-quarter"></i>
+                                    <span>29°C</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-tint"></i>
+                                    <span>52%</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-wind"></i>
+                                    <span>12 km/h</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="region-card low-risk">
+                            <div class="region-header">
+                                <span class="region-name">Haridwar</span>
+                                <span class="risk-badge low">Low</span>
+                            </div>
+                            <div class="risk-percentage">28%</div>
+                            <div class="region-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-thermometer-quarter"></i>
+                                    <span>28°C</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-tint"></i>
+                                    <span>58%</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-wind"></i>
+                                    <span>10 km/h</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
