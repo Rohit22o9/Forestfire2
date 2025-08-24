@@ -26,3 +26,7 @@ args = "cd /home/runner/NeuroNix-Dashboard && python ml_api.py"
 
 [deployment]
 run = ["sh", "-c", "python undefined"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80
