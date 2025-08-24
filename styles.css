@@ -1091,7 +1091,7 @@ html {
     backdrop-filter: blur(16px);
     border: 1px solid rgba(59, 130, 246, 0.15);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    height: 500px;
+    height: 700px;
     overflow-y: auto;
 }
 
@@ -1161,7 +1161,7 @@ html {
     backdrop-filter: blur(16px);
     border: 1px solid rgba(59, 130, 246, 0.15);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    height: 500px;
+    height: 700px;
     overflow-y: auto;
 }
 
