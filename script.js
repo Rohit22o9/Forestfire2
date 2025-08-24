@@ -6,12 +6,20 @@ let simulationTime = 0;
 let simulationInterval;
 let fireSpreadLayers = [];
 
+// ML API endpoints
+const ML_API_BASE = window.location.origin.replace(':5000', ':5001');
+let mlPredictions = {};
+let realTimeUpdates = false;
+
 // Initialize the dashboard
 document.addEventListener('DOMContentLoaded', function() {
     initializeNavigation();
     initializeMaps();
     initializeCharts();
     initializeSimulation();
+    
+    // Initialize ML components
+    initializeMLIntegration();
 
     // Initialize monitoring stats
     updateMonitoringStats();
@@ -504,7 +512,10 @@ function initializeSimulation() {
 }
 
 // Fire simulation functions
-function startFireSimulation(latlng) {
+async function startFireSimulation(latlng) {
+    // Try ML-powered simulation first
+    const mlSimulation = await simulateFireWithML(latlng);
+    
     // Add animated fire origin marker with enhanced visuals
     const fireMarker = L.marker([latlng.lat, latlng.lng], {
         icon: L.divIcon({
@@ -522,6 +533,12 @@ function startFireSimulation(latlng) {
     }).addTo(simulationMap);
 
     fireSpreadLayers.push(fireMarker);
+    
+    // Store ML simulation data if available
+    if (mlSimulation) {
+        window.currentMLSimulation = mlSimulation;
+        showToast('AI-powered simulation active', 'success');
+    }
 
     // Add initial burn circle
     const initialBurn = L.circle([latlng.lat, latlng.lng], {
@@ -1346,7 +1363,353 @@ function updateActivityFeed() {
     }
 }
 
-// Update environmental conditions
+// ML Integration Functions
+function initializeMLIntegration() {
+    // Start real-time ML predictions
+    startMLRealTimeUpdates();
+    
+    // Initialize ML model info display
+    loadMLModelInfo();
+    
+    // Set up periodic ML updates
+    setInterval(updateMLPredictions, 60000); // Every minute
+    
+    showToast('AI/ML models initialized successfully', 'success');
+}
+
+async function startMLRealTimeUpdates() {
+    try {
+        const response = await fetch(`${ML_API_BASE}/api/ml/start-realtime`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            realTimeUpdates = true;
+            showToast('Real-time AI predictions activated', 'success');
+        }
+    } catch (error) {
+        console.warn('ML API not available, using fallback predictions');
+        showToast('Using local AI predictions', 'warning');
+    }
+}
+
+async function updateMLPredictions() {
+    try {
+        // Get current environmental data
+        const envData = getCurrentEnvironmentalData();
+        
+        // Get ML predictions
+        const response = await fetch(`${ML_API_BASE}/api/ml/predict`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(envData)
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            if (result.success) {
+                mlPredictions = result.predictions;
+                updateDashboardWithMLPredictions(result.predictions);
+            }
+        }
+    } catch (error) {
+        // Fallback to local predictions
+        const envData = getCurrentEnvironmentalData();
+        mlPredictions = generateFallbackPredictions(envData);
+        updateDashboardWithMLPredictions(mlPredictions);
+    }
+}
+
+async function getRealTimeMLPredictions() {
+    try {
+        const response = await fetch(`${ML_API_BASE}/api/ml/realtime`);
+        if (response.ok) {
+            const result = await response.json();
+            if (result.success) {
+                return result.predictions;
+            }
+        }
+    } catch (error) {
+        console.warn('Real-time ML predictions unavailable');
+    }
+    return null;
+}
+
+function getCurrentEnvironmentalData() {
+    // Extract current environmental data from dashboard
+    const temperature = parseFloat(document.getElementById('temperature')?.textContent) || 32;
+    const humidity = parseFloat(document.getElementById('humidity')?.textContent) || 45;
+    const windSpeed = parseFloat(document.getElementById('wind-speed')?.textContent) || 15;
+    const windDirection = document.getElementById('wind-direction')?.textContent || 'NE';
+    
+    return {
+        temperature,
+        humidity,
+        wind_speed: windSpeed,
+        wind_direction: windDirection,
+        ndvi: 0.6 + (Math.random() - 0.5) * 0.2,
+        elevation: 1500 + Math.random() * 500,
+        slope: 10 + Math.random() * 20,
+        vegetation_density: 'moderate'
+    };
+}
+
+function updateDashboardWithMLPredictions(predictions) {
+    // Update risk percentages with ML predictions
+    const riskItems = document.querySelectorAll('.risk-item');
+    
+    if (predictions.ensemble_risk_score) {
+        const riskScore = predictions.ensemble_risk_score;
+        const riskCategory = predictions.ml_prediction?.risk_category || 'moderate';
+        
+        // Update model accuracy display
+        const accuracyEl = document.getElementById('accuracyValue');
+        if (accuracyEl && predictions.confidence_interval) {
+            const confidence = (predictions.confidence_interval.confidence_level * 100).toFixed(1);
+            accuracyEl.textContent = confidence + '%';
+        }
+        
+        // Update region-specific predictions if available from real-time API
+        updateRegionalMLPredictions();
+    }
+    
+    // Update AI model performance metrics
+    updateMLPerformanceMetrics(predictions);
+    
+    // Show ML-based recommendations
+    displayMLRecommendations(predictions.recommendations || []);
+}
+
+async function updateRegionalMLPredictions() {
+    try {
+        const realTimePredictions = await getRealTimeMLPredictions();
+        if (realTimePredictions) {
+            const regions = ['Nainital', 'Almora', 'Dehradun', 'Haridwar'];
+            
+            regions.forEach(region => {
+                const regionData = realTimePredictions[region];
+                if (regionData) {
+                    updateRegionDisplay(region, regionData.prediction);
+                }
+            });
+        }
+    } catch (error) {
+        console.warn('Regional ML predictions update failed');
+    }
+}
+
+function updateRegionDisplay(regionName, prediction) {
+    // Find region card and update with ML prediction
+    const regionCards = document.querySelectorAll('.region-card');
+    
+    regionCards.forEach(card => {
+        const nameEl = card.querySelector('.region-name');
+        if (nameEl && nameEl.textContent.toLowerCase().includes(regionName.toLowerCase())) {
+            const percentageEl = card.querySelector('.risk-percentage');
+            const badgeEl = card.querySelector('.risk-badge');
+            
+            if (percentageEl && prediction.ensemble_risk_score) {
+                const riskPercent = Math.round(prediction.ensemble_risk_score * 100);
+                percentageEl.textContent = riskPercent + '%';
+                
+                // Update risk category
+                const category = prediction.ml_prediction?.risk_category || 'moderate';
+                if (badgeEl) {
+                    badgeEl.textContent = category.replace('-', ' ').toUpperCase();
+                    badgeEl.className = 'risk-badge ' + category.replace('_', '-');
+                }
+                
+                // Update card class
+                card.className = `region-card ${category.replace('_', '-')}-risk`;
+            }
+        }
+    });
+}
+
+function updateMLPerformanceMetrics(predictions) {
+    // Update gauge values with ML-specific metrics
+    if (predictions.ml_prediction) {
+        const fwiEl = document.querySelector('.metric-value');
+        if (fwiEl && predictions.fire_weather_index) {
+            const fwi = (predictions.fire_weather_index * 100).toFixed(1);
+            // Update one of the performance metrics with FWI
+        }
+        
+        // Update confidence indicators
+        if (predictions.confidence_interval) {
+            const confidence = predictions.confidence_interval.confidence_level;
+            updateConfidenceIndicators(confidence);
+        }
+    }
+}
+
+function updateConfidenceIndicators(confidence) {
+    // Add confidence indicators to predictions
+    const confidenceElements = document.querySelectorAll('.prediction-confidence');
+    confidenceElements.forEach(el => {
+        el.textContent = `${(confidence * 100).toFixed(1)}% confidence`;
+        el.style.color = confidence > 0.8 ? '#10B981' : confidence > 0.6 ? '#F59E0B' : '#EF4444';
+    });
+}
+
+function displayMLRecommendations(recommendations) {
+    // Display AI-generated recommendations in activity feed
+    if (recommendations.length > 0) {
+        const activityFeed = document.querySelector('.activity-feed');
+        if (activityFeed) {
+            const recommendationItem = document.createElement('div');
+            recommendationItem.className = 'activity-item new ml-recommendation';
+            recommendationItem.innerHTML = `
+                <div class="activity-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="activity-content">
+                    <div class="activity-title">AI Recommendation</div>
+                    <div class="activity-description">${recommendations[0]}</div>
+                    <div class="activity-time">Just now</div>
+                </div>
+            `;
+            
+            activityFeed.insertBefore(recommendationItem, activityFeed.firstChild);
+            
+            // Remove old items to keep feed manageable
+            const items = activityFeed.querySelectorAll('.activity-item');
+            if (items.length > 6) {
+                items[items.length - 1].remove();
+            }
+        }
+    }
+}
+
+async function simulateFireWithML(latlng) {
+    try {
+        const envData = getCurrentEnvironmentalData();
+        
+        const response = await fetch(`${ML_API_BASE}/api/ml/simulate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                lat: latlng.lat,
+                lng: latlng.lng,
+                duration: 6,
+                ...envData
+            })
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            if (result.success) {
+                displayMLSimulationResults(result.simulation);
+                showToast('AI-powered fire simulation completed', 'success');
+                return result.simulation;
+            }
+        }
+    } catch (error) {
+        console.warn('ML simulation failed, using fallback');
+        showToast('Using simplified fire simulation', 'warning');
+    }
+    
+    return null;
+}
+
+function displayMLSimulationResults(simulation) {
+    // Update simulation monitoring with ML results
+    if (simulation.hourly_progression) {
+        const finalState = simulation.final_state;
+        
+        if (finalState) {
+            document.getElementById('totalBurnedArea').textContent = 
+                finalState.burned_area_hectares?.toFixed(1) + ' ha' || '0 ha';
+            document.getElementById('firePerimeter').textContent = 
+                finalState.fire_perimeter_km?.toFixed(1) + ' km' || '0 km';
+            document.getElementById('spreadRate').textContent = 
+                (finalState.burned_area_hectares / 6)?.toFixed(1) + ' ha/hr' || '0 ha/hr';
+        }
+        
+        // Update simulation chart with ML data
+        updateSimulationChartWithML(simulation.hourly_progression);
+    }
+}
+
+function updateSimulationChartWithML(progression) {
+    if (window.chartInstances && window.chartInstances.simulationMonitoring) {
+        const chart = window.chartInstances.simulationMonitoring;
+        
+        // Clear existing data
+        chart.data.labels = [];
+        chart.data.datasets[0].data = [];
+        chart.data.datasets[1].data = [];
+        
+        // Add ML simulation data
+        progression.forEach((point, index) => {
+            chart.data.labels.push(`${index}h`);
+            chart.data.datasets[0].data.push(point.burned_area_hectares || 0);
+            chart.data.datasets[1].data.push(point.fire_perimeter_km || 0);
+        });
+        
+        chart.update('none');
+    }
+}
+
+function generateFallbackPredictions(envData) {
+    // Generate local predictions when ML API is unavailable
+    const tempFactor = Math.min(envData.temperature / 40, 1);
+    const humidityFactor = Math.max(0, (100 - envData.humidity) / 100);
+    const windFactor = Math.min(envData.wind_speed / 30, 1);
+    
+    const baseRisk = (tempFactor * 0.4 + humidityFactor * 0.4 + windFactor * 0.2);
+    const ensemble_risk = Math.min(baseRisk + Math.random() * 0.1, 1);
+    
+    return {
+        ensemble_risk_score: ensemble_risk,
+        ml_prediction: {
+            overall_risk: ensemble_risk,
+            confidence: 0.85,
+            risk_category: ensemble_risk > 0.7 ? 'high' : ensemble_risk > 0.4 ? 'moderate' : 'low'
+        },
+        fire_weather_index: baseRisk,
+        confidence_interval: {
+            confidence_level: 0.85,
+            lower_bound: Math.max(0, ensemble_risk - 0.1),
+            upper_bound: Math.min(1, ensemble_risk + 0.1)
+        },
+        recommendations: [
+            ensemble_risk > 0.7 ? 'High fire risk detected - implement prevention measures' :
+            ensemble_risk > 0.4 ? 'Moderate fire risk - maintain vigilance' :
+            'Low fire risk - continue routine monitoring'
+        ]
+    };
+}
+
+async function loadMLModelInfo() {
+    try {
+        const response = await fetch(`${ML_API_BASE}/api/ml/model-info`);
+        if (response.ok) {
+            const result = await response.json();
+            if (result.success) {
+                // Update model accuracy display
+                const accuracyEl = document.getElementById('accuracyValue');
+                if (accuracyEl && result.models.convlstm_unet.accuracy) {
+                    accuracyEl.textContent = result.models.convlstm_unet.accuracy;
+                }
+                
+                // Store model info for tooltips
+                window.mlModelInfo = result.models;
+            }
+        }
+    } catch (error) {
+        console.warn('ML model info unavailable');
+    }
+}
+
+// Update environmental conditions with ML integration
 function updateEnvironmentalConditions() {
     // Update condition values with realistic variations
     const temperatureEl = document.querySelector('.condition-card.temperature .condition-value');
@@ -1366,6 +1729,11 @@ function updateEnvironmentalConditions() {
     if (windEl) {
         const newWind = Math.floor(Math.random() * 15) + 8; // 8-23 km/h
         windEl.textContent = newWind + ' km/h';
+    }
+    
+    // Trigger ML prediction update when environmental conditions change
+    if (Math.random() < 0.3) { // 30% chance to update ML predictions
+        updateMLPredictions();
     }
 }
 

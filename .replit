@@ -13,3 +13,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python -m http.server 5000 --bind 0.0.0.0"
+
+[[workflows.workflow]]
+name = "Start ML API Server"
+author = 46823921
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd /home/runner/NeuroNix-Dashboard && python ml_api.py"
