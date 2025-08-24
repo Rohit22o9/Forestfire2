@@ -665,7 +665,7 @@ html {
     backdrop-filter: blur(16px);
     border: 1px solid rgba(59, 130, 246, 0.1);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-    height: 370px;
+    height: 600px;
     overflow-y: auto;
 }
 
@@ -721,7 +721,7 @@ html {
     backdrop-filter: blur(16px);
     border: 1px solid rgba(59, 130, 246, 0.1);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-    height: 370px;
+    height: 600px;
     overflow-y: auto;
 }
 
@@ -1189,6 +1189,103 @@ html {
 
 .fire-active {
     animation: fireGlow 2s infinite;
+}
+
+/* Custom Fire Marker Styles */
+.fire-marker {
+    background: transparent !important;
+    border: none !important;
+    color: #EF4444 !important;
+}
+
+.fire-icon-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.fire-flame {
+    font-size: 32px !important;
+    color: #EF4444 !important;
+    text-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
+    animation: fireFlicker 1.5s infinite alternate;
+    z-index: 2;
+    position: relative;
+}
+
+.fire-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulseGlow 2s infinite;
+    z-index: 1;
+}
+
+.fire-sparks {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.2) 0%, transparent 80%);
+    border-radius: 50%;
+    animation: sparkle 3s infinite;
+    z-index: 0;
+}
+
+@keyframes fireFlicker {
+    0% {
+        transform: scale(1) rotate(-1deg);
+        color: #EF4444;
+    }
+    50% {
+        transform: scale(1.1) rotate(1deg);
+        color: #F59E0B;
+    }
+    100% {
+        transform: scale(1.05) rotate(-0.5deg);
+        color: #EF4444;
+    }
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0.9;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+}
+
+@keyframes sparkle {
+    0%, 100% {
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(0.8) rotate(0deg);
+    }
+    33% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1.1) rotate(120deg);
+    }
+    66% {
+        opacity: 0.4;
+        transform: translate(-50%, -50%) scale(0.9) rotate(240deg);
+    }
+}
+
+.origin-fire .fire-flame {
+    font-size: 36px !important;
+    animation: fireFlicker 1s infinite alternate, fireGlow 2s infinite;
 }
 
 @keyframes smokeRise {
