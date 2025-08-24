@@ -361,8 +361,10 @@ html {
 #fire-risk .section-content {
     grid-template-columns: 1.5fr 1fr;
     gap: 2rem;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
+    display: grid;
+    align-items: start;
 }
 
 /* Professional Map Container */
@@ -1801,9 +1803,13 @@ html {
         padding: 0.6rem 1rem;
         flex-shrink: 0;
     }
+
+    #fire-risk .section-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
 }
 
-    #fire-risk .section-content,
     .simulation-layout {
         grid-template-columns: 1fr;
         gap: 2rem;
