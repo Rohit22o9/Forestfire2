@@ -85,8 +85,9 @@ html {
 .header-status {
     display: flex;
     align-items: center;
-    gap: 2.5rem;
-    font-size: 0.9rem;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
 }
 
 .status-indicator {
@@ -94,6 +95,7 @@ html {
     align-items: center;
     gap: 0.5rem;
     color: #10B981;
+    font-weight: 500;
 }
 
 .status-dot.active {
@@ -103,6 +105,7 @@ html {
     background: #10B981;
     box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
     animation: pulse 2s infinite;
+    flex-shrink: 0;
 }
 
 .last-update {
@@ -110,6 +113,17 @@ html {
     align-items: center;
     gap: 0.5rem;
     color: #94A3B8;
+    font-weight: 400;
+    padding: 0.25rem 0.75rem;
+    background: rgba(51, 65, 85, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    min-width: fit-content;
+}
+
+.last-update i {
+    font-size: 0.8rem;
+    opacity: 0.8;
 }
 
 .hero-badge {
