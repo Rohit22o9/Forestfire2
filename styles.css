@@ -34,16 +34,18 @@ html {
 .header-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 1rem 2rem;
+    padding: 0.75rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    min-height: 80px;
 }
 
 .logo {
     display: flex;
-    align-items: center;
-    gap: 0.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
     font-size: 1.5rem;
     font-weight: 700;
     color: #3B82F6;
@@ -51,16 +53,22 @@ html {
     position: relative;
 }
 
+.logo > span:first-of-type {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .tagline {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: #94A3B8;
     font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-top: 0.25rem;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
 }
 
 .header-controls {
