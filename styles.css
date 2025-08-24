@@ -580,8 +580,8 @@ html {
 /* Enhanced Simulation Layout */
 .simulation-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 1.5rem;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 2rem;
     align-items: start;
     max-width: 1400px;
     margin: 0 auto;
@@ -1750,10 +1750,10 @@ html {
 
     .simulation-layout {
         grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
     }
 
-    .parameters-panel {
+    .simulation-container {
         grid-column: span 2;
     }
 }
